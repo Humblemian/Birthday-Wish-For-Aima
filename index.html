@@ -40,7 +40,115 @@
             position: relative;
         }
 
-        /* Ambient Glows - Optimized with translate3d for GPU hardware acceleration */
+        /* ----------------------------------------------------------
+           LOCK SCREEN STYLES
+        ---------------------------------------------------------- */
+        #lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(13, 6, 20, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .lock-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            will-change: transform;
+        }
+
+        .lock-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .lock-box h2 {
+            font-family: 'Cinzel', serif;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .lock-box p {
+            color: #d8b4fe;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .lock-box input[type="password"] {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 1.2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .lock-box input[type="password"]:focus {
+            border-color: var(--primary-pink);
+        }
+
+        .lock-box button {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 101, 163, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .lock-box button:hover {
+            transform: scale(1.02);
+        }
+
+        #error-msg {
+            color: #ef4444;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .secret-content {
+            display: none;
+        }
+
+        /* ----------------------------------------------------------
+           MAIN CONTENT & LIGHTWEIGHT ANIMATIONS
+        ---------------------------------------------------------- */
         .ambient-glow {
             position: fixed;
             border-radius: 50%;
@@ -54,7 +162,6 @@
         .glow-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--primary-purple); }
         .glow-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: var(--primary-pink); }
 
-        /* Optimized Floating CSS Particles */
         .particles-container {
             position: fixed;
             top: 0;
@@ -82,7 +189,6 @@
             100% { transform: translate3d(30px, -10vh, 0); opacity: 0; }
         }
 
-        /* Typography */
         h1, h2, .luxury-font {
             font-family: 'Cinzel', serif;
         }
@@ -90,7 +196,6 @@
             font-family: 'Great Vibes', cursive;
         }
 
-        /* Glassmorphism Styles - Performance Optimized Blur */
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(8px);
@@ -100,7 +205,6 @@
             border-radius: 24px;
         }
 
-        /* Hero Section */
         #hero {
             min-height: 100vh;
             display: flex;
@@ -130,7 +234,6 @@
             font-weight: 300;
         }
 
-        /* Glow Button */
         .btn-glow {
             background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
             color: #fff;
@@ -156,7 +259,6 @@
             transform: scale(0.98);
         }
 
-        /* Hidden Sections before reveal */
         .content-section {
             opacity: 0;
             transform: translate3d(0, 30px, 0);
@@ -172,7 +274,6 @@
             display: block;
         }
 
-        /* Layout Container */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -199,7 +300,6 @@
             border-radius: 2px;
         }
 
-        /* Our Journey Timeline */
         .timeline {
             position: relative;
             padding: 2rem 0;
@@ -265,7 +365,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Special Letter Section */
         .letter-box {
             padding: 2.5rem 2rem;
             min-height: 400px;
@@ -298,7 +397,6 @@
             margin-top: 4px;
         }
 
-        /* Birthday Cake Section */
         .cake-container {
             display: flex;
             flex-direction: column;
@@ -360,7 +458,6 @@
             opacity: 0.9;
         }
 
-        /* Candles */
         .candle-group {
             position: absolute;
             top: 30px;
@@ -418,7 +515,6 @@
             transform: scale(1);
         }
 
-        /* Gift Box Section */
         .gift-container {
             display: flex;
             flex-direction: column;
@@ -499,7 +595,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 3rem 1rem;
@@ -515,7 +610,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Audio Control Button */
         .audio-btn {
             position: fixed;
             bottom: 20px;
@@ -540,7 +634,6 @@
             background: var(--primary-pink);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .timeline::before { left: 20px; }
             .timeline-item { width: 100%; padding-left: 50px !important; text-align: left !important; }
@@ -553,123 +646,174 @@
 </head>
 <body>
 
-    <!-- Lightweight Background Particles -->
-    <div class="particles-container" id="particlesContainer"></div>
-
-    <!-- Ambient Visual Glows -->
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
-
-    <!-- Audio Toggle Button -->
-    <button class="audio-btn" id="audioToggle" title="Toggle Birthday Music">
-        <i class="fas fa-music"></i>
-    </button>
-
-    <!-- SECTION 1: HERO -->
-    <section id="hero">
-        <h1 class="hero-title">🎉 Happy 15th Birthday,<br>Drama Baz! 🎂</h1>
-        <p class="hero-subtitle">“Today is all about you. May this birthday be as beautiful as your smile.”</p>
-        <button class="btn-glow" id="revealBtn">Open Your Surprise ❤️</button>
-    </section>
-
-    <!-- REVEALABLE CONTENT WRAPPER -->
-    <div id="main-content" class="content-section">
-
-        <!-- SECTION 2: OUR JOURNEY -->
-        <section class="container">
-            <h2 class="section-title luxury-font">Our Journey</h2>
-            <div class="timeline">
-                
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card timeline-card">
-                        <div class="timeline-date">📍 October 2023</div>
-                        <p>The first time we met.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card timeline-card">
-                        <div class="timeline-date">💬 May 2024</div>
-                        <p>We started talking, and every conversation became a beautiful memory.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card timeline-card">
-                        <div class="timeline-date">🎂 24 August</div>
-                        <p>Today you turn 15. Wishing you endless happiness and success.</p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SECTION 3: SPECIAL LETTER -->
-        <section class="container">
-            <h2 class="section-title luxury-font">Special Letter</h2>
-            <div class="glass-card letter-box" id="letterContainer">
-                <!-- Lines dynamic load -->
-            </div>
-        </section>
-
-        <!-- SECTION 4: INTERACTIVE BIRTHDAY CAKE -->
-        <section class="container">
-            <h2 class="section-title luxury-font">Make a Wish</h2>
-            <div class="glass-card cake-container">
-                <div class="cake">
-                    <div class="plate"></div>
-                    <div class="layer layer-bottom"></div>
-                    <div class="layer layer-middle"></div>
-                    <div class="layer layer-top"></div>
-                    <div class="icing"></div>
-                    <div class="candle-group">
-                        <div class="candle"><div class="flame" id="flame1"></div></div>
-                        <div class="candle"><div class="flame" id="flame2"></div></div>
-                        <div class="candle"><div class="flame" id="flame3"></div></div>
-                    </div>
-                </div>
-
-                <button class="btn-glow" id="blowBtn">🎂 Blow Out the Candles</button>
-                <div class="wish-reveal luxury-font" id="wishMsg">✨ Make a Wish, Drama Baz! ✨</div>
-            </div>
-        </section>
-
-        <!-- SECTION 5: SURPRISE GIFT -->
-        <section class="container">
-            <h2 class="section-title luxury-font">A Final Surprise</h2>
-            <div class="gift-container">
-                <div class="gift-box" id="giftBox">
-                    <div class="gift-lid"><div class="ribbon-v"></div></div>
-                    <div class="gift-body"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
-                </div>
-
-                <div class="glass-card gift-message" id="giftMsg">
-                    <h3 class="love-title luxury-font">❤️ I LOVE YOU ❤️</h3>
-                    <p style="font-size: 1.2rem; line-height: 1.7; color: #f3e8ff;">
-                        “Thank you for being part of my journey. Every memory with you means a lot to me. Happy 15th Birthday, Drama Baz.”
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer>
-            <p class="handwriting" style="font-size: 2rem; color: var(--primary-pink);">Made with ❤️ Especially for Drama Baz</p>
-            <p class="luxury-font" style="letter-spacing: 2px;">Happy 15th Birthday 🎂</p>
-        </footer>
-
+    <!-- 1️⃣ LOCK SCREEN -->
+    <div id="lock-screen">
+        <div class="lock-box" id="lock-box">
+            <div class="lock-icon"><i class="fas fa-lock"></i></div>
+            <h2>Private Message</h2>
+            <p>Enter the secret passcode to view this page:</p>
+            <input type="password" id="passInput" placeholder="Enter password..." autofocus>
+            <button onclick="checkPassword()">Unlock ✨</button>
+            <p id="error-msg">Incorrect password. Please try again!</p>
+        </div>
     </div>
 
-    <!-- JAVASCRIPT ENGINE -->
+    <!-- 2️⃣ SECRET BIRTHDAY WEBSITE CONTENT -->
+    <div class="secret-content" id="secret-content">
+
+        <!-- Background Floating Particles -->
+        <div class="particles-container" id="particlesContainer"></div>
+
+        <!-- Ambient Visual Glows -->
+        <div class="ambient-glow glow-1"></div>
+        <div class="ambient-glow glow-2"></div>
+
+        <!-- Audio Toggle Button -->
+        <button class="audio-btn" id="audioToggle" title="Toggle Birthday Music">
+            <i class="fas fa-music"></i>
+        </button>
+
+        <!-- SECTION 1: HERO -->
+        <section id="hero">
+            <h1 class="hero-title">🎉 Happy 15th Birthday,<br>Drama Baz! 🎂</h1>
+            <p class="hero-subtitle">“Today is all about you. May this birthday be as beautiful as your smile.”</p>
+            <button class="btn-glow" id="revealBtn">Open Your Surprise ❤️</button>
+        </section>
+
+        <!-- REVEALABLE CONTENT WRAPPER -->
+        <div id="main-content" class="content-section">
+
+            <!-- SECTION 2: OUR JOURNEY -->
+            <section class="container">
+                <h2 class="section-title luxury-font">Our Journey</h2>
+                <div class="timeline">
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="glass-card timeline-card">
+                            <div class="timeline-date">📍 October 2023</div>
+                            <p>The first time we met.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="glass-card timeline-card">
+                            <div class="timeline-date">💬 May 2024</div>
+                            <p>We started talking, and every conversation became a beautiful memory.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="glass-card timeline-card">
+                            <div class="timeline-date">🎂 24 August</div>
+                            <p>Today you turn 15. Wishing you endless happiness and success.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION 3: SPECIAL LETTER -->
+            <section class="container">
+                <h2 class="section-title luxury-font">Special Letter</h2>
+                <div class="glass-card letter-box" id="letterContainer">
+                    <!-- Lines dynamic load -->
+                </div>
+            </section>
+
+            <!-- SECTION 4: INTERACTIVE BIRTHDAY CAKE -->
+            <section class="container">
+                <h2 class="section-title luxury-font">Make a Wish</h2>
+                <div class="glass-card cake-container">
+                    <div class="cake">
+                        <div class="plate"></div>
+                        <div class="layer layer-bottom"></div>
+                        <div class="layer layer-middle"></div>
+                        <div class="layer layer-top"></div>
+                        <div class="icing"></div>
+                        <div class="candle-group">
+                            <div class="candle"><div class="flame" id="flame1"></div></div>
+                            <div class="candle"><div class="flame" id="flame2"></div></div>
+                            <div class="candle"><div class="flame" id="flame3"></div></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-glow" id="blowBtn">🎂 Blow Out the Candles</button>
+                    <div class="wish-reveal luxury-font" id="wishMsg">✨ Make a Wish, Drama Baz! ✨</div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: SURPRISE GIFT -->
+            <section class="container">
+                <h2 class="section-title luxury-font">A Final Surprise</h2>
+                <div class="gift-container">
+                    <div class="gift-box" id="giftBox">
+                        <div class="gift-lid"><div class="ribbon-v"></div></div>
+                        <div class="gift-body"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
+                    </div>
+
+                    <div class="glass-card gift-message" id="giftMsg">
+                        <h3 class="love-title luxury-font">❤️ I LOVE YOU ❤️</h3>
+                        <p style="font-size: 1.2rem; line-height: 1.7; color: #f3e8ff;">
+                            “Thank you for being part of my journey. Every memory with you means a lot to me. Happy 15th Birthday, Drama Baz.”
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer>
+                <p class="handwriting" style="font-size: 2rem; color: var(--primary-pink);">Made with ❤️ Especially for Drama Baz</p>
+                <p class="luxury-font" style="letter-spacing: 2px;">Happy 15th Birthday 🎂</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- 3️⃣ JAVASCRIPT LOGIC -->
     <script>
         /* ----------------------------------------------------------
-           1. HARDWARE ACCELERATED CSS PARTICLES GENERATOR
+           1. PASSWORD LOCK LOGIC
+        ---------------------------------------------------------- */
+        const SECRET_PASSWORD = "Aima"; 
+
+        function checkPassword() {
+            const passInput = document.getElementById("passInput");
+            const userInput = passInput.value;
+            const errorMsg = document.getElementById("error-msg");
+            const lockScreen = document.getElementById("lock-screen");
+            const lockBox = document.getElementById("lock-box");
+            const secretContent = document.getElementById("secret-content");
+
+            if (userInput === SECRET_PASSWORD) {
+                secretContent.style.display = "block";
+                lockScreen.style.opacity = "0";
+                setTimeout(() => {
+                    lockScreen.style.display = "none";
+                }, 500);
+            } else {
+                errorMsg.style.display = "block";
+                lockBox.classList.add("shake");
+                passInput.value = "";
+                setTimeout(() => {
+                    lockBox.classList.remove("shake");
+                }, 400);
+            }
+        }
+
+        document.getElementById("passInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+
+        /* ----------------------------------------------------------
+           2. LIGHTWEIGHT CSS PARTICLES GENERATOR
         ---------------------------------------------------------- */
         const particlesContainer = document.getElementById('particlesContainer');
-        const particleCount = 20; // Reduced count for smooth performance
+        const particleCount = 20;
 
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
@@ -690,7 +834,7 @@
         }
 
         /* ----------------------------------------------------------
-           2. LIGHTWEIGHT WEB AUDIO SYNTHESIZER
+           3. AUDIO SYNTHESIZER
         ---------------------------------------------------------- */
         let audioCtx = null;
         let isMelodyPlaying = false;
@@ -784,7 +928,7 @@
         });
 
         /* ----------------------------------------------------------
-           3. SPECIAL LETTER TYPEWRITER ANIMATION
+           4. TYPEWRITER LETTER
         ---------------------------------------------------------- */
         const letterLines = [
             "Happy 15th Birthday, Drama Baz.",
@@ -823,7 +967,7 @@
         }
 
         /* ----------------------------------------------------------
-           4. FIREWORKS ENGINE (Triggered on demand only)
+           5. FIREWORKS ENGINE
         ---------------------------------------------------------- */
         function triggerFireworks() {
             confetti({
@@ -835,7 +979,7 @@
         }
 
         /* ----------------------------------------------------------
-           5. EVENT HANDLERS
+           6. CONTENT REVEAL & INTERACTIVITY
         ---------------------------------------------------------- */
         const revealBtn = document.getElementById('revealBtn');
         const mainContent = document.getElementById('main-content');
