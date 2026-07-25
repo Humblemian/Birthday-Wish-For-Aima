@@ -768,6 +768,40 @@ background: var(--primary-pink);
 </div>
 </div>
 </section>
+    <!-- SECTION: SERIOUS QUESTION (GLOBAL 1-RESPONSE LOCK) -->
+<section class="container">
+    <h2 class="section-title luxury-font">A Serious Question</h2>
+    <div class="glass-card" id="questionCard" style="padding: 2.5rem 1.5rem; text-align: center;">
+        
+        <!-- Loading State -->
+        <div id="loadingGroup" style="color: #d8b4fe; font-size: 1rem;">
+            Loading...
+        </div>
+
+        <!-- Input State (Shown only if NO ONE has answered globally yet) -->
+        <div id="inputGroup" style="display: none;">
+            <h3 class="luxury-font" style="font-size: 1.6rem; color: #fff; margin-bottom: 1rem;">
+                What is one promise you want us to make to each other? 🔒
+            </h3>
+            <p style="color: #d8b4fe; font-size: 0.95rem; margin-bottom: 1.5rem;">
+                (Think carefully — once submitted, your answer is locked forever across all devices.)
+            </p>
+            
+            <form id="seriousForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" onsubmit="handleFormSubmit(event)">
+                <textarea name="promise_answer" id="userAnswerInput" placeholder="Type your answer here..." required style="width: 100%; max-width: 450px; height: 100px; padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(0, 0, 0, 0.3); color: #fff; font-family: inherit; font-size: 1rem; resize: none; outline: none; margin-bottom: 1.2rem;"></textarea>
+                <br>
+                <button type="submit" id="submitBtn" class="btn-glow">Lock In My Answer ✨</button>
+            </form>
+        </div>
+
+        <!-- Locked State (Shown on ALL devices once answered) -->
+        <div id="lockedGroup" style="display: none;">
+            <p style="color: var(--gold); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem;">🔒 Answer Locked Permanently</p>
+            <h3 class="handwriting" id="displayAnswer" style="font-size: 2.2rem; color: #fff; margin-top: 0.5rem;"></h3>
+        </div>
+
+    </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
@@ -1036,6 +1070,88 @@ giftMsg.classList.add('open');
 giftMsg.classList.remove('open');
 }
 });
+    /* ----------------------------------------------------------
+   GLOBAL 1-RESPONSE LOCK LOGIC (JSONBIN + FORMSPREE)
+---------------------------------------------------------- */
+const JSONBIN_ID = "6a63f922da38895dfe8c4dfa";
+const JSONBIN_API_KEY = "$2a$10$OjBuoQfJSpV/SgSdTKKaFO.m7TfnZHHvLqYzp1Jzd2tatppKr9vMC";
+
+document.addEventListener("DOMContentLoaded", function() {
+    checkGlobalLockStatus();
+});
+
+// Check cloud database on page load (from ANY device)
+function checkGlobalLockStatus() {
+    fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+        headers: { "X-Master-Key": JSONBIN_API_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("loadingGroup").style.display = "none";
+        const record = data.record;
+
+        if (record && record.locked) {
+            // Locked globally for ALL devices
+            showLockedAnswer(record.answer);
+        } else {
+            // Not answered yet — allow typing
+            document.getElementById("inputGroup").style.display = "block";
+        }
+    })
+    .catch(() => {
+        // Fallback to input if network check fails
+        document.getElementById("loadingGroup").style.display = "none";
+        document.getElementById("inputGroup").style.display = "block";
+    });
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const answerText = document.getElementById("userAnswerInput").value.trim();
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (answerText === "") return;
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Locking in...";
+
+    // 1. Send answer directly to your email
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Email submission failed");
+
+        // 2. Lock it in JSONBin cloud so ALL devices see it as locked
+        return fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": JSONBIN_API_KEY
+            },
+            body: JSON.stringify({ locked: true, answer: answerText })
+        });
+    })
+    .then(() => {
+        if (typeof triggerFireworks === "function") triggerFireworks();
+        showLockedAnswer(answerText);
+    })
+    .catch(err => {
+        alert("Oops! Something went wrong. Please try again.");
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Lock In My Answer ✨";
+    });
+}
+
+function showLockedAnswer(text) {
+    document.getElementById("loadingGroup").style.display = "none";
+    document.getElementById("inputGroup").style.display = "none";
+    document.getElementById("displayAnswer").innerText = `"${text}"`;
+    document.getElementById("lockedGroup").style.display = "block";
+}
 </script>
 </body>
 </html>
