@@ -14,10 +14,10 @@
     <!-- Font Awesome for luxury icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts (Includes Cinzel, Great Vibes, Plus Jakarta Sans, and Charmonman) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Charmonman&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Cinzel:wght@500;700;900&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -49,21 +49,37 @@
             position: relative;
         }
 
-        /* Letter Section Specific CSS */
+        /* Layout & Component Styles */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: #fff;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        /* Interactive Letter Section */
         .letter-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 4rem 0; /* Vertical space */
-            perspective: 1000px; /* Essential for 3D effect */
+            margin: 4rem 0;
+            perspective: 1000px;
         }
 
-        /* The main envelope wrapper */
         .envelope-wrapper {
             position: relative;
             width: 300px;
             height: 200px;
-            background: #fafafa; /* Lighter color so it stands out */
+            background: #fafafa;
             border: 2px solid #ddd;
             cursor: pointer;
             transition: transform 0.5s ease-in-out;
@@ -72,7 +88,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* Standard envelope flap visual */
         .envelope-wrapper::after {
             content: '';
             position: absolute;
@@ -86,7 +101,6 @@
             box-sizing: border-box;
         }
 
-        /* The triangle flap */
         .envelope-wrapper .flap {
             position: absolute;
             top: 0;
@@ -94,40 +108,36 @@
             height: 0;
             border-left: 150px solid transparent;
             border-right: 150px solid transparent;
-            border-top: 100px solid #f9f9f9; /* Color of the flap */
+            border-top: 100px solid #f9f9f9;
             transform-origin: top;
             transition: transform 0.5s 0.2s, z-index 0s 0.3s;
-            z-index: 11; /* Flap stays on top of envelope until opened */
+            z-index: 11;
             box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
-        /* Text on the front of the envelope */
         .envelope-text {
             position: absolute;
             width: 100%;
             text-align: center;
             top: 50%;
             transform: translateY(-50%);
-            color: #d946ef; /* Magenta/Love color from your theme */
+            color: #d946ef;
             font-family: inherit;
             font-size: 1rem;
             letter-spacing: 1px;
-            z-index: 9; /* Text stays behind the flap */
+            z-index: 9;
         }
 
-        /* State: Letter is OPENED */
         .envelope-wrapper.open {
             transform: rotateX(10deg);
         }
 
-        /* Rotation animation for the flap */
         .envelope-wrapper.open .flap {
             transform: rotateX(180deg);
-            z-index: 8; /* Move behind the letter after opening */
+            z-index: 8;
             transition: transform 0.5s;
         }
 
-        /* The actual piece of paper inside */
         .letter {
             position: absolute;
             top: 10px;
@@ -139,28 +149,24 @@
             border-radius: 4px;
             box-sizing: border-box;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            
-            opacity: 0; /* Hidden initially */
+            opacity: 0;
             z-index: 9;
-            transition: transform 0.7s 0.5s ease-out, opacity 0.5s 0.5s; /* Wait for flap to open */
-            
-            overflow: hidden; /* Important for animation */
+            transition: transform 0.7s 0.5s ease-out, opacity 0.5s 0.5s;
+            overflow: hidden;
         }
 
-        /* The text inside the letter */
         .letter-text {
-            font-family: 'Charmonman', cursive; /* Apply the Handwriting font */
+            font-family: 'Charmonman', cursive;
             font-size: 1.1rem;
             line-height: 1.7;
-            color: #4c1d95; /* Dark, legible purple */
+            color: #4c1d95;
             text-align: center;
         }
 
-        /* Transition: Letter sliding out of the envelope */
         .envelope-wrapper.open .letter {
-            transform: translateY(-160px); /* Adjust this value if letter text gets cut off */
+            transform: translateY(-160px);
             opacity: 1;
-            height: auto; /* Allow the paper to expand to the content */
+            height: auto;
         }
     </style>
 </head>
