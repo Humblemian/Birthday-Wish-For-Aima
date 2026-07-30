@@ -45,7 +45,124 @@ font-family: 'Plus Jakarta Sans', sans-serif;
 overflow-x: hidden;
 position: relative;
 }
+<!-- Load 'Charmonman' Handwriting Font for the Poetry -->
+<link href="https://fonts.googleapis.com/css2?family=Charmonman&display=swap" rel="stylesheet">
 
+<style>
+    /* Letter Section Specific CSS */
+    .letter-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 4rem 0; /* Vertical space */
+        perspective: 1000px; /* Essential for 3D effect */
+    }
+
+    /* The main envelope wrapper */
+    .envelope-wrapper {
+        position: relative;
+        width: 300px;
+        height: 200px;
+        background: #fafafa; /* Lighter color so it stands out */
+        border: 2px solid #ddd;
+        cursor: pointer;
+        transition: transform 0.5s ease-in-out;
+        transform-style: preserve-3d;
+        z-index: 10;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    /* Standard envelope flap visual */
+    .envelope-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f1f1f1;
+        border: 2px solid #ddd;
+        border-top: none;
+        box-sizing: border-box;
+    }
+
+    /* The triangle flap */
+    .envelope-wrapper .flap {
+        position: absolute;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-top: 100px solid #f9f9f9; /* Color of the flap */
+        transform-origin: top;
+        transition: transform 0.5s 0.2s, z-index 0s 0.3s;
+        z-index: 11; /* Flap stays on top of envelope until opened */
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Text on the front of the envelope */
+    .envelope-text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #d946ef; /* Magenta/Love color from your theme */
+        font-family: inherit;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        z-index: 9; /* Text stays behind the flap */
+    }
+
+    /* State: Letter is OPENED */
+    .envelope-wrapper.open {
+        transform: rotateX(10deg);
+    }
+
+    /* Rotation animation for the flap */
+    .envelope-wrapper.open .flap {
+        transform: rotateX(180deg);
+        z-index: 8; /* Move behind the letter after opening */
+        transition: transform 0.5s;
+    }
+
+    /* The actual piece of paper inside */
+    .letter {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 280px;
+        height: 180px;
+        background-color: #fff;
+        padding: 2rem 1.5rem;
+        border-radius: 4px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        
+        opacity: 0; /* Hidden initially */
+        z-index: 9;
+        transition: transform 0.7s 0.5s ease-out, opacity 0.5s 0.5s; /* Wait for flap to open */
+        
+        overflow: hidden; /* Important for animation */
+    }
+
+    /* The text inside the letter */
+    .letter-text {
+        font-family: 'Charmonman', cursive; /* Apply the Handwriting font */
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #4c1d95; /* Dark, legible purple */
+        text-align: center;
+    }
+
+    /* Transition: Letter sliding out of the envelope */
+    .envelope-wrapper.open .letter {
+        transform: translateY(-160px); /* Adjust this value if letter text gets cut off */
+        opacity: 1;
+        height: auto; /* Allow the paper to expand to the content */
+    }
+</style>
 /* ----------------------------------------------------------
           LOCK SCREEN STYLES
        ---------------------------------------------------------- */
@@ -768,36 +885,33 @@ background: var(--primary-pink);
 </div>
 </div>
 </section>
-    <!-- SECTION: POETRY CARD -->
-<section class="container">
-    <div class="glass-card" style="padding: 2.5rem 1.8rem; text-align: center; max-width: 550px; margin: 0 auto 2rem auto;">
+  <!-- SECTION: INTERACTIVE LOVE LETTER -->
+<section class="container letter-container">
+    
+    <div class="envelope-wrapper" onclick="openLetter(this)">
+        <div class="flap"></div>
+        <div class="envelope-text">Just a little message for you ❤️</div>
         
-        <p style="font-size: 1.15rem; color: #fff; line-height: 1.8; margin-bottom: 1.5rem;">
-            Kuch kehna tha tumse....<br>
-            Sunna chaogi kya? 🤍
-        </p>
-
-        <p style="font-size: 1.15rem; color: #f3e8ff; line-height: 1.8; margin-bottom: 1.5rem;">
-            Zindagi bahut chhoti si hai...<br>
-            Mere saath chalna chaogi kya? 🌸
-        </p>
-
-        <p style="font-size: 1.15rem; color: #fff; line-height: 1.8; margin-bottom: 1.5rem;">
-            Aur jab kabhi meri baatein<br>
-            kam ho jaaye...<br>
-            Tum meri khamoshi padh<br>
-            paogi kya? 🌙
-        </p>
-
-        <p style="font-size: 1.15rem; color: #f3e8ff; line-height: 1.8; margin-bottom: 0.5rem;">
-            Waise toh...<br>
-            Maine har mod pe khud ko<br>
-            sambhala hai,<br>
-            Ek baar tum mujhe sambhalna<br>
-            chaogi kya? ❤️
-        </p>
+        <!-- The paper containing the poetry -->
+        <div class="letter">
+            <div class="letter-text">
+                Kuch kehna tha tumse....<br>
+                Sunna chaogi kya? 🤍
+                <br><br>
+                Zindagi bahut chhoti si hai...<br>
+                Mere saath chalna chaogi kya? 🌸
+                <br><br>
+                Aur jab kabhi meri baatein kam ho jaaye...<br>
+                Tum meri khamoshi padh paogi kya? 🌙
+                <br><br>
+                Waise toh...<br>
+                Maine har mod pe khud ko sambhala hai,<br>
+                Ek baar tum mujhe sambhalna chaogi kya? ❤️
+            </div>
+        </div>
 
     </div>
+
 </section>
     <!-- SECTION: SERIOUS QUESTION (UPDATED WITH YOUR FORMSPREE LINK) -->
 <section class="container">
@@ -1182,6 +1296,13 @@ function showLockedAnswer(text) {
     document.getElementById("inputGroup").style.display = "none";
     document.getElementById("displayAnswer").innerText = `"${text}"`;
     document.getElementById("lockedGroup").style.display = "block";
+}
+    // Function to handle the envelope click
+function openLetter(envelopeElement) {
+    // Add the class "open" to trigger the CSS animations
+    envelopeElement.classList.add('open');
+    // Once clicked, remove the "Just a message" text so it doesn't overlap
+    envelopeElement.querySelector('.envelope-text').style.display = 'none';
 }
 </script>
 </body>
