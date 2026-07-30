@@ -470,7 +470,7 @@
             color: #f3e8ff;
             opacity: 0;
             transform: translate3d(-10px, 0, 0);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: opacity 0.9s ease, transform 0.9s ease;
             display: flex;
             align-items: flex-start;
             gap: 12px;
@@ -685,6 +685,94 @@
             margin-bottom: 1rem;
         }
 
+        .compliment-box {
+            padding: 3rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+        }
+
+        #complimentText {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            color: #fff;
+            max-width: 600px;
+            min-height: 3.2rem;
+            opacity: 1;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        #complimentText.fade {
+            opacity: 0;
+            transform: translate3d(0, 8px, 0);
+        }
+
+        /* Scratch to Reveal */
+        .scratch-container {
+            position: relative;
+            max-width: 480px;
+            height: 220px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .scratch-message {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .scratch-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            touch-action: none;
+            border-radius: 16px;
+        }
+
+        .scratch-canvas.revealed {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        /* Custom cursor trail */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            font-size: 14px;
+            color: var(--primary-pink);
+            animation: cursorTrailFade 0.8s ease-out forwards;
+            will-change: transform, opacity;
+        }
+
+        @keyframes cursorTrailFade {
+            0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+            100% { opacity: 0; transform: translate3d(0, -22px, 0) scale(0.4); }
+        }
+
+        /* Scroll-triggered section fade/slide */
+        .scroll-fade {
+            opacity: 0;
+            transform: translate3d(0, 40px, 0);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .scroll-fade.in-view {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
         footer {
             text-align: center;
             padding: 3rem 1rem;
@@ -774,7 +862,7 @@
 <div id="main-content" class="content-section">
 
 <!-- SECTION 2: OUR JOURNEY -->
-<section class="container">
+<section class="container scroll-fade" id="ourJourneySection">
 <h2 class="section-title luxury-font">Our Journey</h2>
 <div class="timeline">
 
@@ -806,15 +894,18 @@
 </section>
 
 <!-- SECTION 3: SPECIAL LETTER -->
-<section class="container">
+<section class="container scroll-fade" id="specialLetterSection">
 <h2 class="section-title luxury-font">Special Letter</h2>
+<div style="text-align: center; margin-bottom: 2rem;">
+<button class="btn-glow" id="openLetterBtn">Open Letter 💌</button>
+</div>
 <div class="glass-card letter-box" id="letterContainer">
 <!-- Lines dynamic load -->
 </div>
 </section>
 
 <!-- SECTION 4: INTERACTIVE BIRTHDAY CAKE -->
-<section class="container">
+<section class="container scroll-fade">
 <h2 class="section-title luxury-font">Make a Wish</h2>
 <div class="glass-card cake-container">
 <div class="cake">
@@ -836,7 +927,7 @@
 </section>
 
 <!-- SECTION 5: SURPRISE GIFT -->
-<section class="container">
+<section class="container scroll-fade">
 <h2 class="section-title luxury-font">A Final Surprise</h2>
 <div class="gift-container">
 <div class="gift-box" id="giftBox">
@@ -853,8 +944,32 @@
 </div>
 </section>
 
+<!-- SECTION 6: RANDOM COMPLIMENT GENERATOR -->
+<section class="container scroll-fade">
+<h2 class="section-title luxury-font">Compliment For You</h2>
+<div class="glass-card compliment-box">
+<p class="handwriting" id="complimentText">Tap the button for a little compliment ✨</p>
+<button class="btn-glow" id="complimentBtn">Tap</button>
+</div>
+</section>
+
+<!-- SECTION: SCRATCH TO REVEAL -->
+<section class="container scroll-fade">
+  <h2 class="section-title luxury-font">Scratch to Reveal</h2>
+  <div class="glass-card" style="padding: 2.5rem 1.5rem; text-align: center;">
+    <div class="scratch-container" id="scratchContainer" style="height: auto; min-height: 260px;">
+      <div class="scratch-message" id="scratchMessage" style="padding: 2rem 1.5rem;">
+        <p class="handwriting" style="font-size: 1.15rem; color: #fff; margin: 0; line-height: 1.7; font-family: 'Plus Jakarta Sans', sans-serif;">
+          If you ever want to leave, I would never stop you. Love isn't about holding someone back—it's about wanting them to be happy, even if that happiness leads them somewhere else. Of course, it would hurt, and I'd miss you more than words could ever explain, but I'd rather remember your smile than be the reason it fades. Just know that meeting you was one of the best things that ever happened to me. ❤️😘
+        </p>
+      </div>
+      <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+    </div>
+    <p style="margin-top: 1rem; color: #d8b4fe; font-size: 0.9rem;">🖱️ Scratch the gold surface to reveal your message</p>
+  </div>
+</section>
 <!-- SECTION: INTERACTIVE LOVE LETTER -->
-<section class="container letter-container">
+<section class="container letter-container scroll-fade">
 
 <div class="envelope-wrapper" onclick="openLetter(this)">
 <div class="flap"></div>
@@ -883,7 +998,7 @@ Ek baar tum mujhe sambhalna chaogi kya? ❤️
 </section>
 
 <!-- SECTION: SERIOUS QUESTION -->
-<section class="container">
+<section class="container scroll-fade">
 <h2 class="section-title luxury-font">A Serious Question</h2>
 <div class="glass-card" id="questionCard" style="padding: 2.5rem 1.5rem; text-align: center;">
 
@@ -942,6 +1057,12 @@ const lockBox = document.getElementById("lock-box");
 const secretContent = document.getElementById("secret-content");
 
 if (userInput === SECRET_PASSWORD) {
+if (typeof playUnlockSound === 'function') {
+playUnlockSound();
+}
+if (typeof triggerConfettiCannon === 'function') {
+triggerConfettiCannon();
+}
 secretContent.style.display = "block";
 lockScreen.style.opacity = "0";
 setTimeout(() => {
@@ -1021,6 +1142,279 @@ gain.connect(audioCtx.destination);
 osc.start();
 osc.stop(audioCtx.currentTime + duration);
 }, delay);
+}
+
+function playTone(frequency, duration, type, volume) {
+initAudio();
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+
+osc.type = type || 'triangle';
+osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+gain.gain.setValueAtTime(volume || 0.15, audioCtx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+
+osc.start();
+osc.stop(audioCtx.currentTime + duration);
+}
+
+function playClickChime() {
+initAudio();
+const now = audioCtx.currentTime;
+const freqs = [1046.5, 1318.5, 1568.0, 2093.0];
+freqs.forEach((freq, i) => {
+const startAt = now + i * 0.07;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+
+osc.type = 'sine';
+osc.frequency.setValueAtTime(freq, startAt);
+
+gain.gain.setValueAtTime(0.0001, startAt);
+gain.gain.exponentialRampToValueAtTime(0.16, startAt + 0.02);
+gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.6);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+
+osc.start(startAt);
+osc.stop(startAt + 0.6);
+});
+}
+
+function playBlowSound() {
+initAudio();
+const bufferSize = audioCtx.sampleRate * 0.4;
+const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) {
+data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+}
+const noise = audioCtx.createBufferSource();
+noise.buffer = buffer;
+
+const filter = audioCtx.createBiquadFilter();
+filter.type = 'lowpass';
+filter.frequency.setValueAtTime(900, audioCtx.currentTime);
+
+const gain = audioCtx.createGain();
+gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+noise.connect(filter);
+filter.connect(gain);
+gain.connect(audioCtx.destination);
+
+noise.start();
+}
+
+function playSoftPop() {
+initAudio();
+const now = audioCtx.currentTime;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'sine';
+osc.frequency.setValueAtTime(200, now);
+osc.frequency.exponentialRampToValueAtTime(600, now + 0.08);
+
+gain.gain.setValueAtTime(0.0001, now);
+gain.gain.exponentialRampToValueAtTime(0.25, now + 0.015);
+gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start(now);
+osc.stop(now + 0.12);
+}
+
+function playUnwrapSound() {
+initAudio();
+const now = audioCtx.currentTime;
+const duration = 0.5;
+const bufferSize = audioCtx.sampleRate * duration;
+const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) {
+data[i] = (Math.random() * 2 - 1) * Math.random();
+}
+const noise = audioCtx.createBufferSource();
+noise.buffer = buffer;
+
+const filter = audioCtx.createBiquadFilter();
+filter.type = 'highpass';
+filter.frequency.setValueAtTime(1500, now);
+
+const gain = audioCtx.createGain();
+gain.gain.setValueAtTime(0.001, now);
+gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
+gain.gain.linearRampToValueAtTime(0.001, now + duration);
+
+noise.connect(filter);
+filter.connect(gain);
+gain.connect(audioCtx.destination);
+noise.start(now);
+noise.stop(now + duration);
+
+setTimeout(() => {
+if (typeof playSoftPop === 'function') playSoftPop();
+}, duration * 1000 * 0.85);
+}
+
+function playCheerSound() {
+initAudio();
+const now = audioCtx.currentTime;
+const freqs = [220, 277, 330, 415, 494, 587];
+freqs.forEach((f) => {
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'sawtooth';
+osc.frequency.setValueAtTime(f * (0.98 + Math.random() * 0.04), now);
+
+gain.gain.setValueAtTime(0.0001, now);
+gain.gain.linearRampToValueAtTime(0.035, now + 0.12);
+gain.gain.linearRampToValueAtTime(0.0001, now + 0.9);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start(now);
+osc.stop(now + 0.9);
+});
+}
+
+function playPopSound() {
+initAudio();
+const now = audioCtx.currentTime;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'square';
+osc.frequency.setValueAtTime(500, now);
+osc.frequency.exponentialRampToValueAtTime(1200, now + 0.06);
+
+gain.gain.setValueAtTime(0.0001, now);
+gain.gain.exponentialRampToValueAtTime(0.2, now + 0.01);
+gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start(now);
+osc.stop(now + 0.1);
+}
+
+function playCandleSequence() {
+playBlowSound();
+setTimeout(() => {
+if (typeof playCheerSound === 'function') playCheerSound();
+}, 400);
+setTimeout(() => {
+if (typeof playPopSound === 'function') playPopSound();
+}, 1000);
+}
+
+function playUnfoldWhoosh() {
+initAudio();
+const now = audioCtx.currentTime;
+
+const crinkleDur = 0.25;
+const bufferSize = audioCtx.sampleRate * crinkleDur;
+const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) {
+data[i] = (Math.random() * 2 - 1) * Math.random();
+}
+const noise = audioCtx.createBufferSource();
+noise.buffer = buffer;
+const filter = audioCtx.createBiquadFilter();
+filter.type = 'highpass';
+filter.frequency.setValueAtTime(2000, now);
+const ngain = audioCtx.createGain();
+ngain.gain.setValueAtTime(0.001, now);
+ngain.gain.linearRampToValueAtTime(0.15, now + 0.03);
+ngain.gain.linearRampToValueAtTime(0.001, now + crinkleDur);
+noise.connect(filter);
+filter.connect(ngain);
+ngain.connect(audioCtx.destination);
+noise.start(now);
+noise.stop(now + crinkleDur);
+
+const whooshStart = now + 0.15;
+const osc = audioCtx.createOscillator();
+const wgain = audioCtx.createGain();
+osc.type = 'sine';
+osc.frequency.setValueAtTime(150, whooshStart);
+osc.frequency.exponentialRampToValueAtTime(700, whooshStart + 0.3);
+
+wgain.gain.setValueAtTime(0.0001, whooshStart);
+wgain.gain.linearRampToValueAtTime(0.12, whooshStart + 0.08);
+wgain.gain.exponentialRampToValueAtTime(0.0001, whooshStart + 0.35);
+
+osc.connect(wgain);
+wgain.connect(audioCtx.destination);
+osc.start(whooshStart);
+osc.stop(whooshStart + 0.35);
+}
+
+function playUnlockSound() {
+initAudio();
+const now = audioCtx.currentTime;
+
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.type = 'sine';
+osc.frequency.setValueAtTime(300, now);
+osc.frequency.exponentialRampToValueAtTime(950, now + 0.25);
+
+gain.gain.setValueAtTime(0.0001, now);
+gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05);
+gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+
+osc.start(now);
+osc.stop(now + 0.3);
+
+setTimeout(() => {
+if (typeof playClickChime === 'function') playClickChime();
+}, 260);
+}
+
+function playLockSound() {
+initAudio();
+const now = audioCtx.currentTime;
+
+const thud = audioCtx.createOscillator();
+const thudGain = audioCtx.createGain();
+thud.type = 'square';
+thud.frequency.setValueAtTime(180, now);
+thud.frequency.exponentialRampToValueAtTime(80, now + 0.15);
+
+thudGain.gain.setValueAtTime(0.0001, now);
+thudGain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
+thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+
+thud.connect(thudGain);
+thudGain.connect(audioCtx.destination);
+thud.start(now);
+thud.stop(now + 0.2);
+
+const clickAt = now + 0.16;
+const click = audioCtx.createOscillator();
+const clickGain = audioCtx.createGain();
+click.type = 'square';
+click.frequency.setValueAtTime(420, clickAt);
+
+clickGain.gain.setValueAtTime(0.0001, clickAt);
+clickGain.gain.exponentialRampToValueAtTime(0.16, clickAt + 0.005);
+clickGain.gain.exponentialRampToValueAtTime(0.0001, clickAt + 0.09);
+
+click.connect(clickGain);
+clickGain.connect(audioCtx.destination);
+click.start(clickAt);
+click.stop(clickAt + 0.09);
 }
 
 const notes = {
@@ -1116,13 +1510,106 @@ container.appendChild(lineDiv);
 
 setTimeout(() => {
 lineDiv.classList.add('typed');
-}, index * 400);
+}, index * 900);
 });
 }
 
 /* ----------------------------------------------------------
-          5. FIREWORKS ENGINE
+          4b. SPECIAL LETTER OPEN BUTTON
        ---------------------------------------------------------- */
+const openLetterBtn = document.getElementById('openLetterBtn');
+
+if (openLetterBtn) {
+openLetterBtn.addEventListener('click', () => {
+playUnfoldWhoosh();
+typeWriterLetter();
+if (typeof triggerSparkles === 'function') {
+triggerSparkles(0.4);
+}
+openLetterBtn.style.pointerEvents = 'none';
+openLetterBtn.style.opacity = '0.6';
+openLetterBtn.innerText = 'Letter Opened ✨';
+});
+}
+
+/* ----------------------------------------------------------
+          4c. RANDOM COMPLIMENT GENERATOR
+       ---------------------------------------------------------- */
+const compliments = [
+"You're my favorite problem to have.",
+"You're lucky you're so adorable.",
+"I should charge you rent for living in my mind.",
+"You're the reason I smile for no reason.",
+"You seriously need to stop being this cute.",
+"You're my daily dose of beautiful chaos.",
+"I blame you for all my distractions.",
+"You're impossible... and I love that about you.",
+"You're my favorite person to argue with.",
+"You make being annoyed surprisingly enjoyable.",
+"You're the only person I'd lose sleep for.",
+"You have an annoying habit of making my day better.",
+"You're dangerously easy to care about.",
+"Every time I try to ignore you, you become even more adorable.",
+"You're my favorite reason to roll my eyes.",
+"You always find a way to win my heart.",
+"I pretend you're annoying just to hide how much I like you.",
+"You're the cutest little troublemaker.",
+"You're impossible to replace.",
+"Somehow, you always get away with everything.",
+"You're the plot twist I never saw coming.",
+"My peace disappeared the day I met you.",
+"You're the reason my phone is never far away.",
+"You're officially my favorite distraction.",
+"You make stubborn look adorable.",
+"You're lucky your smile is so powerful.",
+"I didn't choose you... my heart did.",
+"You're the sweetest inconvenience.",
+"You're the only headache I'd never want to cure.",
+"I could never stay mad at you for long.",
+"You're the reason my heart refuses to behave.",
+"You always know how to steal my attention.",
+"You're my favorite notification.",
+"You make ordinary days feel special.",
+"You're the only person who can ruin my mood and fix it at the same time.",
+"You're ridiculously lovable.",
+"I should be mad at you, but you're too cute.",
+"You're the best mistake my heart ever made.",
+"You're my favorite excuse to smile.",
+"Life was quieter before you... but definitely less fun.",
+"You make teasing you way too entertaining.",
+"You're the reason I believe in unforgettable people.",
+"You have a talent for making my heart skip a beat.",
+"You're unfairly charming.",
+"I hope you never realize how special you are... or you'll become even more impossible.",
+"You're the only person I'd happily spoil.",
+"You're worth every silly argument.",
+"My favorite hobby is pretending I don't miss you.",
+"You're the best thing I never planned for.",
+"You're lucky my heart has terrible judgment... because it chose you."
+];
+
+const complimentBtn = document.getElementById('complimentBtn');
+const complimentText = document.getElementById('complimentText');
+let lastComplimentIndex = -1;
+
+function showRandomCompliment() {
+playClickChime();
+let index;
+do {
+index = Math.floor(Math.random() * compliments.length);
+} while (compliments.length > 1 && index === lastComplimentIndex);
+lastComplimentIndex = index;
+
+complimentText.classList.add('fade');
+setTimeout(() => {
+complimentText.innerText = compliments[index];
+complimentText.classList.remove('fade');
+}, 300);
+}
+
+if (complimentBtn) {
+complimentBtn.addEventListener('click', showRandomCompliment);
+}
 function triggerFireworks() {
 confetti({
 particleCount: 80,
@@ -1132,6 +1619,78 @@ colors: ['#ff65a3', '#fbbf24', '#7c3aed']
 });
 }
 
+function triggerConfettiCannon() {
+if (typeof confetti !== 'function') return;
+const duration = 1500;
+const end = Date.now() + duration;
+
+(function frame() {
+confetti({
+particleCount: 5,
+angle: 60,
+spread: 55,
+origin: { x: 0 },
+colors: ['#ff65a3', '#fbbf24', '#7c3aed']
+});
+confetti({
+particleCount: 5,
+angle: 120,
+spread: 55,
+origin: { x: 1 },
+colors: ['#ff65a3', '#fbbf24', '#7c3aed']
+});
+if (Date.now() < end) {
+requestAnimationFrame(frame);
+}
+})();
+}
+
+function triggerSparkles(originY) {
+const y = typeof originY === 'number' ? originY : 0.4;
+confetti({
+particleCount: 40,
+startVelocity: 20,
+spread: 100,
+origin: { y },
+colors: ['#fbbf24', '#ff65a3', '#f3e8ff'],
+shapes: ['star'],
+scalar: 0.8,
+ticks: 150
+});
+confetti({
+particleCount: 20,
+startVelocity: 12,
+spread: 60,
+origin: { y },
+colors: ['#fbbf24', '#fff'],
+shapes: ['circle'],
+scalar: 0.5,
+ticks: 120
+});
+}
+
+/* ----------------------------------------------------------
+          5b. SPECIAL LETTER SCROLL SPARKLE TRIGGER
+       ---------------------------------------------------------- */
+let specialLetterSparkled = false;
+const specialLetterSection = document.getElementById('specialLetterSection');
+
+if (specialLetterSection && 'IntersectionObserver' in window) {
+const letterObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting && !specialLetterSparkled) {
+specialLetterSparkled = true;
+const rect = entry.target.getBoundingClientRect();
+const originY = Math.min(Math.max(rect.top / window.innerHeight, 0), 1);
+triggerSparkles(originY);
+letterObserver.unobserve(entry.target);
+}
+});
+}, { threshold: 0.35 });
+
+letterObserver.observe(specialLetterSection);
+}
+
 /* ----------------------------------------------------------
           6. CONTENT REVEAL & INTERACTIVITY
        ---------------------------------------------------------- */
@@ -1139,6 +1698,7 @@ const revealBtn = document.getElementById('revealBtn');
 const mainContent = document.getElementById('main-content');
 
 revealBtn.addEventListener('click', () => {
+playSoftPop();
 triggerFireworks();
 playBirthdayMelody();
 
@@ -1148,7 +1708,10 @@ setTimeout(() => {
 mainContent.scrollIntoView({ behavior: 'smooth' });
 }, 200);
 
-setTimeout(typeWriterLetter, 600);
+setTimeout(() => {
+if (typeof initScrollFade === 'function') initScrollFade();
+if (typeof initScratchCard === 'function') initScratchCard();
+}, 300);
 });
 
 // Blow Candles
@@ -1157,6 +1720,7 @@ const flames = [document.getElementById('flame1'), document.getElementById('flam
 const wishMsg = document.getElementById('wishMsg');
 
 blowBtn.addEventListener('click', () => {
+playCandleSequence();
 flames.forEach(f => f.classList.add('extinguished'));
 triggerFireworks();
 
@@ -1176,6 +1740,7 @@ const giftMsg = document.getElementById('giftMsg');
 giftBox.addEventListener('click', () => {
 giftBox.classList.toggle('open');
 if (giftBox.classList.contains('open')) {
+playUnwrapSound();
 triggerFireworks();
 setTimeout(() => {
 giftMsg.classList.add('open');
@@ -1222,6 +1787,9 @@ document.getElementById("inputGroup").style.display = "block";
 
 function handleFormSubmit(event) {
 event.preventDefault();
+if (typeof playLockSound === 'function') {
+playLockSound();
+}
 const form = event.target;
 const answerText = document.getElementById("userAnswerInput").value.trim();
 const submitBtn = document.getElementById("submitBtn");
@@ -1270,10 +1838,152 @@ document.getElementById("lockedGroup").style.display = "block";
 
 // Function to handle the envelope click
 function openLetter(envelopeElement) {
+if (typeof playUnfoldWhoosh === 'function') {
+playUnfoldWhoosh();
+}
 // Add the class "open" to trigger the CSS animations
 envelopeElement.classList.add('open');
 // Once clicked, remove the "Just a message" text so it doesn't overlap
 envelopeElement.querySelector('.envelope-text').style.display = 'none';
+}
+
+/* ----------------------------------------------------------
+          7. CUSTOM CURSOR TRAIL (HEARTS & SPARKLES)
+       ---------------------------------------------------------- */
+let lastTrailTime = 0;
+
+function spawnCursorTrail(x, y) {
+const now = Date.now();
+if (now - lastTrailTime < 70) return;
+lastTrailTime = now;
+
+const el = document.createElement('span');
+el.className = 'cursor-trail';
+el.style.left = (x - 7) + 'px';
+el.style.top = (y - 7) + 'px';
+el.textContent = Math.random() > 0.5 ? '❤' : '✨';
+document.body.appendChild(el);
+
+setTimeout(() => el.remove(), 800);
+}
+
+window.addEventListener('mousemove', (e) => spawnCursorTrail(e.clientX, e.clientY));
+window.addEventListener('touchmove', (e) => {
+if (e.touches && e.touches[0]) {
+spawnCursorTrail(e.touches[0].clientX, e.touches[0].clientY);
+}
+}, { passive: true });
+
+/* ----------------------------------------------------------
+          8. SCROLL-TRIGGERED SECTION FADE/SLIDE
+       ---------------------------------------------------------- */
+function initScrollFade() {
+const fadeEls = document.querySelectorAll('.scroll-fade');
+if (!fadeEls.length) return;
+
+if (!('IntersectionObserver' in window)) {
+fadeEls.forEach(el => el.classList.add('in-view'));
+return;
+}
+
+const fadeObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('in-view');
+fadeObserver.unobserve(entry.target);
+}
+});
+}, { threshold: 0.15 });
+
+fadeEls.forEach(el => fadeObserver.observe(el));
+}
+
+/* ----------------------------------------------------------
+          9. SCRATCH-TO-REVEAL CARD
+       ---------------------------------------------------------- */
+function initScratchCard() {
+const canvas = document.getElementById('scratchCanvas');
+const container = document.getElementById('scratchContainer');
+if (!canvas || !container || canvas.dataset.initialized === 'true') return;
+canvas.dataset.initialized = 'true';
+
+const ctx = canvas.getContext('2d');
+let revealed = false;
+let scratchCount = 0;
+
+function sizeCanvas() {
+canvas.width = container.clientWidth;
+canvas.height = container.clientHeight;
+drawScratchLayer();
+}
+
+function drawScratchLayer() {
+const w = canvas.width;
+const h = canvas.height;
+const gradient = ctx.createLinearGradient(0, 0, w, h);
+gradient.addColorStop(0, '#d4af37');
+gradient.addColorStop(1, '#b08d3f');
+ctx.globalCompositeOperation = 'source-over';
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, w, h);
+
+ctx.fillStyle = 'rgba(255,255,255,0.12)';
+for (let i = 0; i < 60; i++) {
+ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+}
+
+ctx.fillStyle = 'rgba(255,255,255,0.9)';
+ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('✨ Scratch here ✨', w / 2, h / 2);
+}
+
+sizeCanvas();
+window.addEventListener('resize', sizeCanvas);
+
+function getPos(e) {
+const rect = canvas.getBoundingClientRect();
+const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function scratch(e) {
+if (revealed) return;
+const pos = getPos(e);
+ctx.globalCompositeOperation = 'destination-out';
+ctx.beginPath();
+ctx.arc(pos.x, pos.y, 24, 0, Math.PI * 2);
+ctx.fill();
+scratchCount++;
+if (scratchCount > 28) {
+revealCard();
+}
+}
+
+function revealCard() {
+if (revealed) return;
+revealed = true;
+canvas.classList.add('revealed');
+if (typeof playSoftPop === 'function') playSoftPop();
+if (typeof triggerSparkles === 'function') triggerSparkles(0.5);
+}
+
+let isScratching = false;
+
+canvas.addEventListener('mousedown', (e) => { isScratching = true; scratch(e); });
+canvas.addEventListener('mousemove', (e) => { if (isScratching) scratch(e); });
+window.addEventListener('mouseup', () => { isScratching = false; });
+
+canvas.addEventListener('touchstart', (e) => { isScratching = true; scratch(e); }, { passive: true });
+canvas.addEventListener('touchmove', (e) => {
+if (isScratching) {
+scratch(e);
+e.preventDefault();
+}
+}, { passive: false });
+window.addEventListener('touchend', () => { isScratching = false; });
 }
 </script>
 </body>
