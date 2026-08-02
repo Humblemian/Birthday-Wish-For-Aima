@@ -12,6 +12,7 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xw2om5nr62");
 </script>
+
     <!-- Meta Tags -->
     <meta property="og:title" content="Happy 15th Birthday, Drama Baz! 🎂✨" />
     <meta property="og:description" content="A special birthday surprise made just for you!" />
@@ -1410,11 +1411,46 @@ Will you be my life partner? Then we'll travel the world together. ✈️🌍
 <!-- 3️⃣ JAVASCRIPT LOGIC -->
 <script>
 /* ----------------------------------------------------------
-          1. PASSWORD LOCK LOGIC
+          0. MASTER ACTIVITY TRACKING (DISCORD WEBHOOK)
+          Every meaningful interaction on the site pings this
+          Discord webhook so you can see activity in real time.
        ---------------------------------------------------------- */
-const SECRET_PASSWORD = "Aima";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1533452257197297706/en3JYI2I4YFUAxHQr4Y0gyS0UDPfFd-Q_ykt--CF4piNj-IsYftNRATFAjAxXe0DPXVt";
 
-function checkPassword() {
+function trackActivity(title, description, color) {
+try {
+fetch(DISCORD_WEBHOOK_URL, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+embeds: [{
+title: title,
+description: description || "",
+color: typeof color === "number" ? color : 0xff65a3,
+timestamp: new Date().toISOString(),
+footer: { text: "Happy Birthday Site — Activity Tracker" }
+}]
+})
+}).catch(() => {});
+} catch (e) {}
+}
+
+/* ----------------------------------------------------------
+          1. PASSWORD LOCK LOGIC
+          Password is never stored in plain text. Instead we keep
+          a SHA-256 hash of it, and compare hashes.
+       ---------------------------------------------------------- */
+const SECRET_PASSWORD_HASH = "646b76c237b4c914f930808890de543d961e12dd4cd901e1bd27a55659dbf615";
+
+async function sha256Hex(text) {
+const encoder = new TextEncoder();
+const data = encoder.encode(text);
+const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+const hashArray = Array.from(new Uint8Array(hashBuffer));
+return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function checkPassword() {
 const passInput = document.getElementById("passInput");
 const userInput = passInput.value;
 const errorMsg = document.getElementById("error-msg");
@@ -1422,7 +1458,10 @@ const lockScreen = document.getElementById("lock-screen");
 const lockBox = document.getElementById("lock-box");
 const secretContent = document.getElementById("secret-content");
 
-if (userInput === SECRET_PASSWORD) {
+const enteredHash = await sha256Hex(userInput);
+
+if (enteredHash === SECRET_PASSWORD_HASH) {
+trackActivity("🔓 Site Unlocked", "Correct password entered — she's in the site now!", 0x22c55e);
 if (typeof playUnlockSound === 'function') {
 playUnlockSound();
 }
@@ -1435,6 +1474,7 @@ setTimeout(() => {
 lockScreen.style.display = "none";
 }, 500);
 } else {
+trackActivity("❌ Wrong Password Attempt", "Guess entered: \"" + userInput + "\"", 0xef4444);
 errorMsg.style.display = "block";
 lockBox.classList.add("shake");
 passInput.value = "";
@@ -1938,6 +1978,7 @@ const openLetterBtn = document.getElementById('openLetterBtn');
 
 if (openLetterBtn) {
 openLetterBtn.addEventListener('click', () => {
+trackActivity("💌 Special Letter Opened", "She opened the Special Letter section.", 0xf472b6);
 playUnfoldWhoosh();
 typeWriterLetter();
 if (typeof triggerSparkles === 'function') {
@@ -2021,6 +2062,7 @@ complimentText.classList.add('fade');
 setTimeout(() => {
 complimentText.innerText = compliments[index];
 complimentText.classList.remove('fade');
+trackActivity("💬 Compliment Requested", "Shown: \"" + compliments[index] + "\"", 0xa78bfa);
 }, 300);
 }
 
@@ -2115,6 +2157,7 @@ const revealBtn = document.getElementById('revealBtn');
 const mainContent = document.getElementById('main-content');
 
 revealBtn.addEventListener('click', () => {
+trackActivity("🎉 Surprise Opened", "She clicked \"Open Your Surprise\" — the site is now revealed!", 0xff65a3);
 playSoftPop();
 triggerFireworks();
 playBirthdayMelody();
@@ -2137,6 +2180,7 @@ const flames = [document.getElementById('flame1'), document.getElementById('flam
 const wishMsg = document.getElementById('wishMsg');
 
 blowBtn.addEventListener('click', () => {
+trackActivity("🎂 Made a Wish", "She blew out the candles on the cake!", 0xfbbf24);
 playCandleSequence();
 flames.forEach(f => f.classList.add('extinguished'));
 triggerFireworks();
@@ -2157,6 +2201,7 @@ const giftMsg = document.getElementById('giftMsg');
 giftBox.addEventListener('click', () => {
 giftBox.classList.toggle('open');
 if (giftBox.classList.contains('open')) {
+trackActivity("🎁 Gift Opened", "She opened the final surprise gift box!", 0xec4899);
 playUnwrapSound();
 triggerFireworks();
 setTimeout(() => {
@@ -2174,6 +2219,7 @@ const JSONBIN_ID = "6a640d49da38895dfe8c7d59";
 const JSONBIN_API_KEY = "$2a$10$OjBuoQfJSpV/SgSdTKKaFO.m7TfnZHHvLqYzp1Jzd2tatppKr9vMC";
 
 document.addEventListener("DOMContentLoaded", function() {
+trackActivity("🌐 Website Visited", "Someone just opened the birthday website (lock screen shown).", 0x94a3b8);
 checkGlobalLockStatus();
 if (typeof initAffectionWheel === 'function') {
 initAffectionWheel();
@@ -2242,6 +2288,7 @@ body: JSON.stringify({ locked: true, answer: answerText })
 });
 })
 .then(() => {
+trackActivity("💍 SERIOUS QUESTION ANSWERED!", "Her answer: \"" + answerText + "\"", 0xfbbf24);
 if (typeof triggerFireworks === "function") triggerFireworks();
 showLockedAnswer(answerText);
 })
@@ -2263,6 +2310,9 @@ function flipPromiseCard(card) {
 const wasFlipped = card.classList.contains('flipped');
 card.classList.toggle('flipped');
 if (!wasFlipped) {
+const backText = card.querySelector('.promise-card-back p');
+const promiseText = backText ? backText.textContent : "";
+trackActivity("🌹 Promise Card Flipped", "Revealed: \"" + promiseText + "\"", 0xff9fc0);
 if (typeof playSoftPop === 'function') playSoftPop();
 if (typeof triggerSparkles === 'function') {
 const rect = card.getBoundingClientRect();
@@ -2403,6 +2453,8 @@ if (!modal) return;
 document.getElementById('wonCouponEmoji').textContent = coupon.emoji;
 document.getElementById('wonCouponLabel').textContent = coupon.label;
 modal.classList.add('active');
+
+trackActivity("🎡 Wheel of Affection Spun", "She won: " + coupon.emoji + " " + coupon.label, 0x7c3aed);
 
 if (typeof triggerFireworks === 'function') triggerFireworks();
 if (typeof triggerSparkles === 'function') triggerSparkles(0.4);
@@ -2595,6 +2647,8 @@ const whiteFlash = document.getElementById('puzzleWhiteFlash');
 const revealImage = document.getElementById('puzzleRevealImage');
 const statusEl = document.getElementById('puzzleStatus');
 
+trackActivity("🧩 Puzzle Solved!", "She completed the picture puzzle — magical reveal triggered!", 0xfacc15);
+
 if (revealImage) {
 revealImage.style.backgroundImage = 'url(' + PUZZLE_REVEAL_IMAGE_DATA + ')';
 }
@@ -2702,6 +2756,7 @@ if (redoBtn) redoBtn.addEventListener('click', redoPuzzleMove);
 
 // Function to handle the envelope click
 function openLetter(envelopeElement) {
+trackActivity("💕 Love Letter Envelope Opened", "She opened the little envelope with the poem inside.", 0xff65a3);
 if (typeof playUnfoldWhoosh === 'function') {
 playUnfoldWhoosh();
 }
@@ -2842,6 +2897,7 @@ function revealCard() {
 if (revealed) return;
 revealed = true;
 canvas.classList.add('revealed');
+if (typeof trackActivity === 'function') trackActivity("🖌️ Scratch Card Revealed", "She scratched off the gold card and revealed the hidden message.", 0xd4af37);
 if (typeof playSoftPop === 'function') playSoftPop();
 if (typeof triggerSparkles === 'function') triggerSparkles(0.5);
 }
