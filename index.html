@@ -1007,6 +1007,120 @@
             cursor: not-allowed;
         }
 
+        /* Sticky Notes */
+        .sticky-notes-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .sticky-notes-board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            justify-content: center;
+        }
+
+        .sticky-note {
+            width: 220px;
+            min-height: 220px;
+            border-radius: 4px;
+            padding: 1.2rem 1rem;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(255, 255, 255, 0.35) inset;
+            color: #4a3b0a;
+            position: relative;
+            transform: rotate(var(--tilt, -2deg));
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sticky-note:hover {
+            transform: rotate(0deg) scale(1.04);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5), 0 2px 0 rgba(255, 255, 255, 0.35) inset;
+            z-index: 5;
+        }
+
+        .sticky-note-date {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.65;
+            margin-bottom: 0.5rem;
+        }
+
+        .sticky-note-content {
+            font-family: 'Charmonman', cursive;
+            font-size: 1.15rem;
+            line-height: 1.4;
+            flex: 1;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .sticky-note-photo {
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 0.6rem;
+            max-height: 140px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .sticky-note-edit-btn {
+            align-self: flex-end;
+            margin-top: 0.7rem;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: inherit;
+            font-weight: 600;
+        }
+
+        .sticky-note-locked {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 0.7rem;
+            text-align: center;
+        }
+
+        .sticky-note-locked p {
+            font-size: 0.85rem;
+            opacity: 0.75;
+        }
+
+        .sticky-note-locked input {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .sticky-note-locked button {
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 1.1rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .sticky-note-locked .lock-error {
+            color: #b91c1c;
+            font-size: 0.75rem;
+            display: none;
+        }
+
         /* Wheel modals */
         .wheel-modal-overlay {
             position: fixed;
@@ -1465,6 +1579,20 @@ Ek baar tum mujhe sambhalna chaogi kya? ❤️
 
 </section>
 
+<!-- SECTION: STICKY NOTES -->
+<section class="container scroll-fade">
+<h2 class="section-title luxury-font">📌 Sticky Notes</h2>
+<div class="glass-card sticky-notes-card">
+<p style="color: #d8b4fe; text-align: center; margin-bottom: 1.2rem; font-size: 0.9rem;">Write down memories, add photos, and even lock a note with your own password. Everything saves permanently — come back anytime and edit them.</p>
+<div style="text-align: center; margin-bottom: 1.8rem;">
+<button class="btn-glow" id="addStickyNoteBtn">➕ Add a Memory</button>
+</div>
+<div class="sticky-notes-board" id="stickyNotesBoard"></div>
+<p id="stickyNotesEmptyMsg" style="text-align: center; color: #a78bfa; font-size: 0.9rem; display: none;">No memories yet — be the first to add one 💭</p>
+<p id="stickyNotesLoadError" style="text-align: center; color: #f87171; font-size: 0.85rem; display: none;">Couldn't load saved memories right now — check back in a bit.</p>
+</div>
+</section>
+
 <!-- SECTION: SERIOUS QUESTION -->
 <section class="container scroll-fade">
 <h2 class="section-title luxury-font">A Serious Question</h2>
@@ -1545,6 +1673,34 @@ Will you be my life partner? Then we'll travel the world together. ✈️🌍
 <button class="btn-glow" id="feedbackSpinAgainBtn" style="margin-top: 1.2rem;">🔄 Spin Again</button>
 </div>
 
+</div>
+</div>
+
+<!-- STICKY NOTE EDITOR MODAL -->
+<div class="wheel-modal-overlay" id="stickyNoteModal">
+<div class="glass-card wheel-modal" style="max-width: 480px; text-align: left;">
+<h3 class="luxury-font" style="color: #fff; font-size: 1.4rem; margin-bottom: 1rem; text-align: center;" id="stickyNoteModalTitle">New Memory</h3>
+
+<textarea id="stickyNoteContent" placeholder="Write your memory here..." style="width: 100%; min-height: 120px; padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: #fff; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; margin-bottom: 1rem;"></textarea>
+
+<label style="display: block; color: #d8b4fe; font-size: 0.85rem; margin-bottom: 0.4rem;">📷 Add a photo (optional)</label>
+<input type="file" id="stickyNotePhotoInput" accept="image/*" style="margin-bottom: 1rem; color: #d8b4fe; width: 100%;">
+<div id="stickyNotePhotoPreviewWrap" style="display: none; margin-bottom: 1rem; text-align: center;">
+<img id="stickyNotePhotoPreview" style="max-width: 100%; max-height: 180px; border-radius: 10px;">
+<button type="button" id="removeStickyNotePhotoBtn" style="display: block; margin: 0.5rem auto 0; background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.85rem;">Remove photo</button>
+</div>
+
+<label style="display: flex; align-items: center; gap: 0.5rem; color: #d8b4fe; font-size: 0.9rem; margin-bottom: 0.8rem; cursor: pointer;">
+<input type="checkbox" id="stickyNotePasswordToggle" style="width: 16px; height: 16px;">
+🔒 Protect this note with a password
+</label>
+<input type="password" id="stickyNotePasswordInput" placeholder="Set a password for this note" style="display: none; width: 100%; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 1rem; outline: none;">
+
+<div style="display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; margin-top: 0.5rem;">
+<button class="btn-glow" id="saveStickyNoteBtn">💾 Save Memory</button>
+<button class="btn-glow" id="cancelStickyNoteBtn" style="background: rgba(255,255,255,0.08); box-shadow: none;">Cancel</button>
+</div>
+<p id="stickyNoteStatus" style="text-align: center; color: #a78bfa; font-size: 0.85rem; margin-top: 0.8rem;"></p>
 </div>
 </div>
 
@@ -2385,6 +2541,354 @@ puzzle_time: typeof puzzleElapsedSeconds === "number" ? puzzleElapsedSeconds : n
 } catch (e) {}
 }
 
+/* ----------------------------------------------------------
+   STICKY NOTES (unlimited, editable, optional per-note password,
+   optional photo — all saved permanently to Supabase)
+---------------------------------------------------------- */
+const STICKY_NOTES_TABLE = "sticky_notes";
+const STICKY_NOTES_BUCKET = "sticky-notes-photos";
+const STICKY_NOTE_COLORS = ["#fff6c9", "#ffd9ec", "#cdeaff", "#d6f5d6", "#ffe3c2"];
+
+let stickyNoteEditingId = null;
+let stickyNotePhotoBlob = null;
+let stickyNotePhotoRemoved = false;
+let stickyNoteExistingImageUrl = null;
+let stickyNoteExistingHasPassword = false;
+const stickyNoteUnlockedIds = new Set();
+
+function formatStickyNoteDate(isoString) {
+try {
+const d = new Date(isoString);
+return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+} catch (e) {
+return "";
+}
+}
+
+function resizeImageForUpload(file) {
+return new Promise((resolve) => {
+const img = new Image();
+const reader = new FileReader();
+reader.onload = (e) => {
+img.onload = () => {
+const maxW = 900;
+const scale = Math.min(1, maxW / img.width);
+const canvas = document.createElement('canvas');
+canvas.width = Math.round(img.width * scale);
+canvas.height = Math.round(img.height * scale);
+const ctx = canvas.getContext('2d');
+ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.82);
+};
+img.src = e.target.result;
+};
+reader.readAsDataURL(file);
+});
+}
+
+async function uploadStickyNotePhoto(blob) {
+const fileName = "note-" + Date.now() + "-" + Math.floor(Math.random() * 100000) + ".jpg";
+const res = await fetch(SUPABASE_URL + "/storage/v1/object/" + STICKY_NOTES_BUCKET + "/" + fileName, {
+method: "POST",
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY,
+"Content-Type": "image/jpeg"
+},
+body: blob
+});
+if (!res.ok) throw new Error("Photo upload failed");
+return SUPABASE_URL + "/storage/v1/object/public/" + STICKY_NOTES_BUCKET + "/" + fileName;
+}
+
+async function fetchStickyNotes() {
+const board = document.getElementById('stickyNotesBoard');
+const emptyMsg = document.getElementById('stickyNotesEmptyMsg');
+const errorMsg = document.getElementById('stickyNotesLoadError');
+if (!board) return;
+
+try {
+const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE + "?select=*&order=created_at.desc", {
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY
+}
+});
+if (!res.ok) throw new Error("Failed to load notes");
+const notes = await res.json();
+
+board.innerHTML = "";
+if (!notes.length) {
+if (emptyMsg) emptyMsg.style.display = "block";
+} else {
+if (emptyMsg) emptyMsg.style.display = "none";
+notes.forEach((note, i) => board.appendChild(buildStickyNoteEl(note, i)));
+}
+if (errorMsg) errorMsg.style.display = "none";
+} catch (e) {
+if (errorMsg) errorMsg.style.display = "block";
+}
+}
+
+function buildStickyNoteEl(note, index) {
+const el = document.createElement('div');
+el.className = 'sticky-note';
+el.dataset.noteId = note.id;
+const tilt = (index % 2 === 0 ? -1 : 1) * (2 + (index % 3) * 1.4);
+el.style.setProperty('--tilt', tilt + 'deg');
+el.style.background = STICKY_NOTE_COLORS[index % STICKY_NOTE_COLORS.length];
+
+renderStickyNoteInner(el, note);
+return el;
+}
+
+function renderStickyNoteInner(el, note) {
+el.innerHTML = "";
+
+const dateEl = document.createElement('div');
+dateEl.className = 'sticky-note-date';
+dateEl.textContent = formatStickyNoteDate(note.created_at);
+el.appendChild(dateEl);
+
+const locked = note.has_password && !stickyNoteUnlockedIds.has(note.id);
+
+if (locked) {
+const lockWrap = document.createElement('div');
+lockWrap.className = 'sticky-note-locked';
+lockWrap.innerHTML =
+'<span style="font-size:1.6rem;">🔒</span>' +
+'<p>This memory is password protected</p>' +
+'<input type="password" placeholder="Enter password" class="sticky-note-unlock-input">' +
+'<button type="button" class="sticky-note-unlock-btn">Unlock</button>' +
+'<span class="lock-error">Incorrect password</span>';
+el.appendChild(lockWrap);
+
+const input = lockWrap.querySelector('.sticky-note-unlock-input');
+const btn = lockWrap.querySelector('.sticky-note-unlock-btn');
+const err = lockWrap.querySelector('.lock-error');
+
+const tryUnlock = async () => {
+const hash = await sha256Hex(input.value);
+if (hash === note.password_hash) {
+stickyNoteUnlockedIds.add(note.id);
+if (typeof playUnlockSound === 'function') playUnlockSound();
+renderStickyNoteInner(el, note);
+} else {
+err.style.display = 'inline';
+input.value = '';
+}
+};
+btn.addEventListener('click', tryUnlock);
+input.addEventListener('keypress', (e) => { if (e.key === 'Enter') tryUnlock(); });
+return;
+}
+
+const contentEl = document.createElement('div');
+contentEl.className = 'sticky-note-content';
+contentEl.textContent = note.content || "";
+el.appendChild(contentEl);
+
+if (note.image_url) {
+const img = document.createElement('img');
+img.className = 'sticky-note-photo';
+img.src = note.image_url;
+img.loading = 'lazy';
+el.appendChild(img);
+}
+
+const editBtn = document.createElement('button');
+editBtn.type = 'button';
+editBtn.className = 'sticky-note-edit-btn';
+editBtn.textContent = '✏️ Edit';
+editBtn.addEventListener('click', () => openStickyNoteEditor(note));
+el.appendChild(editBtn);
+}
+
+function openStickyNoteEditor(existingNote) {
+const modal = document.getElementById('stickyNoteModal');
+const title = document.getElementById('stickyNoteModalTitle');
+const contentInput = document.getElementById('stickyNoteContent');
+const photoInput = document.getElementById('stickyNotePhotoInput');
+const previewWrap = document.getElementById('stickyNotePhotoPreviewWrap');
+const preview = document.getElementById('stickyNotePhotoPreview');
+const passToggle = document.getElementById('stickyNotePasswordToggle');
+const passInput = document.getElementById('stickyNotePasswordInput');
+const status = document.getElementById('stickyNoteStatus');
+
+stickyNoteEditingId = existingNote ? existingNote.id : null;
+stickyNotePhotoBlob = null;
+stickyNotePhotoRemoved = false;
+stickyNoteExistingImageUrl = existingNote ? existingNote.image_url : null;
+stickyNoteExistingHasPassword = existingNote ? !!existingNote.has_password : false;
+
+title.textContent = existingNote ? "Edit Memory" : "New Memory";
+contentInput.value = existingNote ? (existingNote.content || "") : "";
+photoInput.value = "";
+status.textContent = "";
+
+if (existingNote && existingNote.image_url) {
+preview.src = existingNote.image_url;
+previewWrap.style.display = "block";
+} else {
+previewWrap.style.display = "none";
+}
+
+passToggle.checked = stickyNoteExistingHasPassword;
+passInput.style.display = passToggle.checked ? "block" : "none";
+passInput.value = "";
+passInput.placeholder = stickyNoteExistingHasPassword ? "Leave blank to keep current password" : "Set a password for this note";
+
+modal.classList.add('active');
+}
+
+function closeStickyNoteEditor() {
+const modal = document.getElementById('stickyNoteModal');
+if (modal) modal.classList.remove('active');
+stickyNoteEditingId = null;
+stickyNotePhotoBlob = null;
+stickyNotePhotoRemoved = false;
+}
+
+async function saveStickyNote() {
+const contentInput = document.getElementById('stickyNoteContent');
+const passToggle = document.getElementById('stickyNotePasswordToggle');
+const passInput = document.getElementById('stickyNotePasswordInput');
+const status = document.getElementById('stickyNoteStatus');
+const saveBtn = document.getElementById('saveStickyNoteBtn');
+
+const content = contentInput.value.trim();
+if (!content && !stickyNotePhotoBlob && !stickyNoteExistingImageUrl) {
+status.textContent = "Write something or add a photo first 💭";
+return;
+}
+
+saveBtn.disabled = true;
+status.textContent = "Saving...";
+
+try {
+let imageUrl = stickyNoteExistingImageUrl;
+if (stickyNotePhotoRemoved) imageUrl = null;
+if (stickyNotePhotoBlob) {
+imageUrl = await uploadStickyNotePhoto(stickyNotePhotoBlob);
+}
+
+let hasPassword = passToggle.checked;
+let passwordHash = null;
+if (hasPassword) {
+if (passInput.value) {
+passwordHash = await sha256Hex(passInput.value);
+} else if (stickyNoteEditingId && stickyNoteExistingHasPassword) {
+passwordHash = "__KEEP__";
+} else {
+status.textContent = "Please set a password, or turn off protection.";
+saveBtn.disabled = false;
+return;
+}
+}
+
+const payload = {
+content: content,
+image_url: imageUrl,
+has_password: hasPassword
+};
+if (passwordHash !== "__KEEP__") {
+payload.password_hash = hasPassword ? passwordHash : null;
+}
+
+let savedNote;
+if (stickyNoteEditingId) {
+payload.updated_at = new Date().toISOString();
+const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE + "?id=eq." + stickyNoteEditingId, {
+method: "PATCH",
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY,
+"Content-Type": "application/json",
+"Prefer": "return=representation"
+},
+body: JSON.stringify(payload)
+});
+if (!res.ok) throw new Error("Update failed");
+const rows = await res.json();
+savedNote = rows[0];
+trackActivity("✏️ Sticky Note Edited", content ? ("Updated memory: \"" + content.slice(0, 120) + "\"") : "A memory was updated.", 0x60a5fa);
+} else {
+const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE, {
+method: "POST",
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY,
+"Content-Type": "application/json",
+"Prefer": "return=representation"
+},
+body: JSON.stringify(payload)
+});
+if (!res.ok) throw new Error("Save failed");
+const rows = await res.json();
+savedNote = rows[0];
+trackActivity("📌 New Sticky Note Added", content ? ("New memory: \"" + content.slice(0, 120) + "\"") : "A new photo memory was added.", 0xfbbf24);
+}
+
+if (savedNote.has_password) {
+stickyNoteUnlockedIds.add(savedNote.id);
+}
+
+saveBtn.disabled = false;
+closeStickyNoteEditor();
+if (typeof triggerSparkles === 'function') triggerSparkles(0.5);
+fetchStickyNotes();
+} catch (e) {
+status.textContent = "Something went wrong saving this. Please try again.";
+saveBtn.disabled = false;
+}
+}
+
+function initStickyNotes() {
+fetchStickyNotes();
+
+const addBtn = document.getElementById('addStickyNoteBtn');
+if (addBtn) addBtn.addEventListener('click', () => openStickyNoteEditor(null));
+
+const cancelBtn = document.getElementById('cancelStickyNoteBtn');
+if (cancelBtn) cancelBtn.addEventListener('click', closeStickyNoteEditor);
+
+const saveBtn = document.getElementById('saveStickyNoteBtn');
+if (saveBtn) saveBtn.addEventListener('click', saveStickyNote);
+
+const passToggle = document.getElementById('stickyNotePasswordToggle');
+const passInput = document.getElementById('stickyNotePasswordInput');
+if (passToggle && passInput) {
+passToggle.addEventListener('change', () => {
+passInput.style.display = passToggle.checked ? "block" : "none";
+});
+}
+
+const photoInput = document.getElementById('stickyNotePhotoInput');
+const previewWrap = document.getElementById('stickyNotePhotoPreviewWrap');
+const preview = document.getElementById('stickyNotePhotoPreview');
+if (photoInput) {
+photoInput.addEventListener('change', async () => {
+const file = photoInput.files && photoInput.files[0];
+if (!file) return;
+const blob = await resizeImageForUpload(file);
+stickyNotePhotoBlob = blob;
+stickyNotePhotoRemoved = false;
+preview.src = URL.createObjectURL(blob);
+previewWrap.style.display = "block";
+});
+}
+
+const removePhotoBtn = document.getElementById('removeStickyNotePhotoBtn');
+if (removePhotoBtn) {
+removePhotoBtn.addEventListener('click', () => {
+stickyNotePhotoBlob = null;
+stickyNotePhotoRemoved = true;
+previewWrap.style.display = "none";
+photoInput.value = "";
+});
+}
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 trackActivity("🌐 Website Visited", "Someone just opened the birthday website (lock screen shown).", 0x94a3b8);
 checkGlobalLockStatus();
@@ -2393,6 +2897,9 @@ initAffectionWheel();
 }
 if (typeof initPuzzle === 'function') {
 initPuzzle();
+}
+if (typeof initStickyNotes === 'function') {
+initStickyNotes();
 }
 });
 
