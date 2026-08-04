@@ -2608,14 +2608,13 @@ const errorMsg = document.getElementById('stickyNotesLoadError');
 if (!board) return;
 
 try {
-const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE + "?select=*&order=created_at.desc", {
-headers: {
-"apikey": SUPABASE_ANON_KEY,
-"Authorization": "Bearer " + SUPABASE_ANON_KEY
-}
-});
-if (!res.ok) throw new Error("Failed to load notes");
-const notes = await res.json();
+  const { data: notes, error } = await _supabase.rpc('get_public_sticky_notes');
+
+  if (error) {
+    console.error("Error fetching notes:", error);
+    if (errorMsg) errorMsg.style.display = "block";
+    return;
+  }
 
 board.innerHTML = "";
 if (!notes.length) {
@@ -2668,15 +2667,29 @@ const btn = lockWrap.querySelector('.sticky-note-unlock-btn');
 const err = lockWrap.querySelector('.lock-error');
 
 const tryUnlock = async () => {
-const hash = await sha256Hex(input.value);
-if (hash === note.password_hash) {
-stickyNoteUnlockedIds.add(note.id);
-if (typeof playUnlockSound === 'function') playUnlockSound();
-renderStickyNoteInner(el, note);
-} else {
-err.style.display = 'inline';
-input.value = '';
-}
+  const enteredPassword = input.value;
+  if (!enteredPassword) return;
+
+  // Ask Supabase to verify password server-side and retrieve hidden content
+  const { data, error } = await _supabase.rpc('unlock_sticky_note', {
+    note_id: note.id,
+    attempt_password: enteredPassword
+  });
+
+  if (error || !data || data.length === 0) {
+    err.style.display = 'inline';
+    input.value = '';
+    return;
+  }
+
+  // Populate note object with real content returned from database
+  note.content = data[0].content;
+  note.photo_url = data[0].photo_url;
+
+  stickyNoteUnlockedIds.add(note.id);
+  if (typeof playUnlockSound === 'function') playUnlockSound();
+  renderStickyNoteInner(el, note);
+};
 };
 btn.addEventListener('click', tryUnlock);
 input.addEventListener('keypress', (e) => { if (e.key === 'Enter') tryUnlock(); });
