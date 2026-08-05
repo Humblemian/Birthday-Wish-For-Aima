@@ -1079,6 +1079,33 @@
             font-weight: 600;
         }
 
+        .sticky-note-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 0.7rem;
+        }
+
+        .sticky-note-actions .sticky-note-edit-btn,
+        .sticky-note-actions .sticky-note-delete-btn {
+            margin-top: 0;
+        }
+
+        .sticky-note-delete-btn {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: #7a1f1f;
+            font-weight: 600;
+        }
+
+        .sticky-note-delete-btn:hover {
+            background: rgba(220, 38, 38, 0.25);
+        }
+
         .sticky-note-locked {
             display: flex;
             flex-direction: column;
@@ -2935,12 +2962,57 @@ img.loading = 'lazy';
 el.appendChild(img);
 }
 
+const actionsWrap = document.createElement('div');
+actionsWrap.className = 'sticky-note-actions';
+
 const editBtn = document.createElement('button');
 editBtn.type = 'button';
 editBtn.className = 'sticky-note-edit-btn';
 editBtn.textContent = '✏️ Edit';
 editBtn.addEventListener('click', () => openStickyNoteEditor(note));
-el.appendChild(editBtn);
+actionsWrap.appendChild(editBtn);
+
+const deleteBtn = document.createElement('button');
+deleteBtn.type = 'button';
+deleteBtn.className = 'sticky-note-delete-btn';
+deleteBtn.textContent = '🗑️ Delete';
+deleteBtn.addEventListener('click', () => {
+if (deleteBtn.dataset.confirming === 'true') {
+deleteStickyNote(note.id, el);
+} else {
+deleteBtn.dataset.confirming = 'true';
+deleteBtn.textContent = 'Confirm?';
+setTimeout(() => {
+deleteBtn.dataset.confirming = 'false';
+deleteBtn.textContent = '🗑️ Delete';
+}, 3000);
+}
+});
+actionsWrap.appendChild(deleteBtn);
+
+el.appendChild(actionsWrap);
+}
+
+async function deleteStickyNote(id, el) {
+try {
+const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE + "?id=eq." + id, {
+method: "DELETE",
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY
+}
+});
+if (!res.ok) throw new Error("Delete failed");
+trackActivity("🗑️ Sticky Note Deleted", "A memory was permanently deleted.", 0xef4444);
+if (el && el.parentNode) el.parentNode.removeChild(el);
+const board = document.getElementById('stickyNotesBoard');
+const emptyMsg = document.getElementById('stickyNotesEmptyMsg');
+if (board && emptyMsg && board.children.length === 0) {
+emptyMsg.style.display = "block";
+}
+} catch (e) {
+alert("Couldn't delete this note. Please try again.");
+}
 }
 
 function openStickyNoteEditor(existingNote) {
