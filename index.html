@@ -1138,6 +1138,11 @@
             display: flex;
         }
 
+        /* The note editor must render ABOVE the sticky notes board overlay (z-index 9500) */
+        #stickyNoteModal.active {
+            z-index: 9700;
+        }
+
         .wheel-modal {
             max-width: 420px;
             width: 100%;
