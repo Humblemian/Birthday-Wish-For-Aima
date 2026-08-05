@@ -1225,6 +1225,222 @@
             background: var(--primary-pink);
         }
 
+        /* ----------------------------------------------------------
+          STICKY NOTES — FLOATING BUTTON + FULL BOARD OVERLAY
+       ---------------------------------------------------------- */
+        .sticky-notes-fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: rgba(251, 191, 36, 0.12);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 0 14px var(--gold-glow), 0 4px 12px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .sticky-notes-fab:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 22px var(--gold-glow), 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .sticky-notes-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 3, 8, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 9500;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .sticky-notes-overlay.active {
+            display: flex;
+        }
+
+        .sticky-notes-panel {
+            position: relative;
+            width: 100%;
+            max-width: 980px;
+            max-height: 88vh;
+            overflow-y: auto;
+            background: radial-gradient(circle at 20% 10%, rgba(120, 72, 20, 0.18), transparent 45%),
+                        radial-gradient(circle at 85% 85%, rgba(120, 72, 20, 0.15), transparent 45%),
+                        #0d0a08;
+            border: 1.5px solid var(--gold);
+            border-radius: 28px;
+            box-shadow: 0 0 10px var(--gold-glow), 0 0 40px rgba(251, 191, 36, 0.15), inset 0 0 30px rgba(251, 191, 36, 0.05);
+            padding: 2rem 1.8rem 2.4rem;
+        }
+
+        .sticky-notes-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .sticky-notes-panel-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
+        .sticky-notes-panel-actions {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .sticky-notes-icon-btn {
+            background: none;
+            border: 1px solid var(--glass-border);
+            color: var(--gold);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .sticky-notes-icon-btn:hover {
+            background: rgba(251, 191, 36, 0.15);
+            transform: scale(1.06);
+        }
+
+        .sticky-notes-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.6rem 1.4rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .sticky-note-pin {
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            box-shadow: 0 3px 4px rgba(0,0,0,0.5), inset 0 -2px 2px rgba(0,0,0,0.25), inset 0 2px 2px rgba(255,255,255,0.4);
+        }
+
+        .sticky-notes-add-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            width: 140px;
+            height: 52px;
+            border-radius: 50px;
+            border: 1.5px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--gold-glow);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .sticky-notes-add-pill:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* Master lock gate shown inside the board panel */
+        .sticky-notes-lock-gate {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1rem 1rem;
+        }
+
+        .sticky-notes-lock-gate.active {
+            display: flex;
+        }
+
+        .sticky-notes-lock-gate .lock-icon {
+            font-size: 2.6rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .sticky-notes-lock-gate input[type="password"] {
+            width: 100%;
+            max-width: 280px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            text-align: center;
+            outline: none;
+            margin: 1rem 0;
+        }
+
+        .sticky-notes-lock-gate button {
+            padding: 0.7rem 1.6rem;
+            border-radius: 50px;
+            border: 1.5px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .sticky-notes-lock-gate .lock-error {
+            color: #f87171;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+            display: none;
+        }
+
+        /* Master password manager mini-panel */
+        .sticky-notes-password-manager {
+            display: none;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.2rem 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .sticky-notes-password-manager.active { display: block; }
+
+        .sticky-notes-password-manager input {
+            width: 100%;
+            max-width: 260px;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            outline: none;
+            margin: 0.4rem 0;
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
             .timeline::before { left: 20px; }
             .timeline-item { width: 100%; padding-left: 50px !important; text-align: left !important; }
@@ -1262,6 +1478,11 @@
 <!-- Audio Toggle Button -->
 <button class="audio-btn" id="audioToggle" title="Toggle Birthday Music">
 <i class="fas fa-music"></i>
+</button>
+
+<!-- Sticky Notes Floating Button -->
+<button class="sticky-notes-fab" id="stickyNotesFab" title="Sticky Notes">
+<i class="fas fa-note-sticky"></i>
 </button>
 
 <!-- SECTION 1: HERO -->
@@ -1579,20 +1800,6 @@ Ek baar tum mujhe sambhalna chaogi kya? ❤️
 
 </section>
 
-<!-- SECTION: STICKY NOTES -->
-<section class="container scroll-fade">
-<h2 class="section-title luxury-font">📌 Sticky Notes</h2>
-<div class="glass-card sticky-notes-card">
-<p style="color: #d8b4fe; text-align: center; margin-bottom: 1.2rem; font-size: 0.9rem;">Write down memories, add photos, and even lock a note with your own password. Everything saves permanently — come back anytime and edit them.</p>
-<div style="text-align: center; margin-bottom: 1.8rem;">
-<button class="btn-glow" id="addStickyNoteBtn">➕ Add a Memory</button>
-</div>
-<div class="sticky-notes-board" id="stickyNotesBoard"></div>
-<p id="stickyNotesEmptyMsg" style="text-align: center; color: #a78bfa; font-size: 0.9rem; display: none;">No memories yet — be the first to add one 💭</p>
-<p id="stickyNotesLoadError" style="text-align: center; color: #f87171; font-size: 0.85rem; display: none;">Couldn't load saved memories right now — check back in a bit.</p>
-</div>
-</section>
-
 <!-- SECTION: SERIOUS QUESTION -->
 <section class="container scroll-fade">
 <h2 class="section-title luxury-font">A Serious Question</h2>
@@ -1676,7 +1883,52 @@ Will you be my life partner? Then we'll travel the world together. ✈️🌍
 </div>
 </div>
 
-<!-- STICKY NOTE EDITOR MODAL -->
+<!-- STICKY NOTES BOARD OVERLAY (opened from the floating button) -->
+<div class="sticky-notes-overlay" id="stickyNotesOverlay">
+<div class="sticky-notes-panel">
+<div class="sticky-notes-panel-header">
+<span class="sticky-notes-panel-title luxury-font">📌 Sticky Notes</span>
+<div class="sticky-notes-panel-actions">
+<button type="button" class="sticky-notes-icon-btn" id="stickyNotesLockManageBtn" title="Manage password"><i class="fas fa-lock"></i></button>
+<button type="button" class="sticky-notes-icon-btn" id="stickyNotesCloseBtn" title="Close"><i class="fas fa-xmark"></i></button>
+</div>
+</div>
+
+<!-- Master password manager (set / change / remove) -->
+<div class="sticky-notes-password-manager" id="stickyNotesPasswordManager">
+<p style="color: #d8b4fe; font-size: 0.85rem; margin-bottom: 0.6rem;" id="stickyNotesPasswordManagerLabel">Set a single password to lock all your notes.</p>
+<input type="password" id="stickyNotesNewPasswordInput" placeholder="New password">
+<input type="password" id="stickyNotesNewPasswordConfirm" placeholder="Confirm password">
+<div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-top: 0.6rem;">
+<button class="btn-glow" id="stickyNotesSavePasswordBtn" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Save</button>
+<button class="btn-glow" id="stickyNotesRemovePasswordBtn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(255,255,255,0.08); box-shadow: none; display: none;">Remove Lock</button>
+<button class="btn-glow" id="stickyNotesCancelPasswordBtn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: rgba(255,255,255,0.08); box-shadow: none;">Cancel</button>
+</div>
+<p id="stickyNotesPasswordManagerStatus" style="text-align: center; color: #a78bfa; font-size: 0.8rem; margin-top: 0.6rem;"></p>
+</div>
+
+<!-- Master lock gate — shown when notes are locked -->
+<div class="sticky-notes-lock-gate" id="stickyNotesLockGate">
+<div class="lock-icon"><i class="fas fa-lock"></i></div>
+<h3 class="luxury-font" style="color: #fff;">Notes are locked</h3>
+<p style="color: #d8b4fe; font-size: 0.9rem;">Enter the password to view all memories</p>
+<input type="password" id="stickyNotesUnlockInput" placeholder="Enter password">
+<button type="button" id="stickyNotesUnlockBtn">Unlock ✨</button>
+<span class="lock-error" id="stickyNotesUnlockError">Incorrect password. Try again.</span>
+</div>
+
+<!-- Notes grid — shown when unlocked (or no lock set) -->
+<div id="stickyNotesUnlockedView">
+<div class="sticky-notes-grid" id="stickyNotesBoard"></div>
+<p id="stickyNotesEmptyMsg" style="text-align: center; color: #a78bfa; font-size: 0.9rem; display: none; margin-bottom: 1.2rem;">No memories yet — be the first to add one 💭</p>
+<p id="stickyNotesLoadError" style="text-align: center; color: #f87171; font-size: 0.85rem; display: none; margin-bottom: 1.2rem;">Couldn't load saved memories right now — check back in a bit.</p>
+<button type="button" class="sticky-notes-add-pill" id="addStickyNoteBtn">+</button>
+</div>
+
+</div>
+</div>
+
+<!-- STICKY NOTE EDITOR MODAL (add / edit a single memory) -->
 <div class="wheel-modal-overlay" id="stickyNoteModal">
 <div class="glass-card wheel-modal" style="max-width: 480px; text-align: left;">
 <h3 class="luxury-font" style="color: #fff; font-size: 1.4rem; margin-bottom: 1rem; text-align: center;" id="stickyNoteModalTitle">New Memory</h3>
@@ -1689,12 +1941,6 @@ Will you be my life partner? Then we'll travel the world together. ✈️🌍
 <img id="stickyNotePhotoPreview" style="max-width: 100%; max-height: 180px; border-radius: 10px;">
 <button type="button" id="removeStickyNotePhotoBtn" style="display: block; margin: 0.5rem auto 0; background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.85rem;">Remove photo</button>
 </div>
-
-<label style="display: flex; align-items: center; gap: 0.5rem; color: #d8b4fe; font-size: 0.9rem; margin-bottom: 0.8rem; cursor: pointer;">
-<input type="checkbox" id="stickyNotePasswordToggle" style="width: 16px; height: 16px;">
-🔒 Protect this note with a password
-</label>
-<input type="password" id="stickyNotePasswordInput" placeholder="Set a password for this note" style="display: none; width: 100%; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 1rem; outline: none;">
 
 <div style="display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; margin-top: 0.5rem;">
 <button class="btn-glow" id="saveStickyNoteBtn">💾 Save Memory</button>
@@ -2542,19 +2788,21 @@ puzzle_time: typeof puzzleElapsedSeconds === "number" ? puzzleElapsedSeconds : n
 }
 
 /* ----------------------------------------------------------
-   STICKY NOTES (unlimited, editable, optional per-note password,
-   optional photo — all saved permanently to Supabase)
+   STICKY NOTES (unlimited, editable, optional photo — saved
+   permanently to Supabase. The whole board is protected by a
+   SINGLE master password instead of per-note passwords.)
 ---------------------------------------------------------- */
 const STICKY_NOTES_TABLE = "sticky_notes";
 const STICKY_NOTES_BUCKET = "sticky-notes-photos";
+const STICKY_NOTES_LOCK_TABLE = "sticky_notes_lock";
 const STICKY_NOTE_COLORS = ["#fff6c9", "#ffd9ec", "#cdeaff", "#d6f5d6", "#ffe3c2"];
+const STICKY_NOTE_PIN_COLORS = ["#ef4444", "#eab308", "#3b82f6", "#22c55e", "#a855f7", "#f97316"];
 
 let stickyNoteEditingId = null;
 let stickyNotePhotoBlob = null;
 let stickyNotePhotoRemoved = false;
 let stickyNoteExistingImageUrl = null;
-let stickyNoteExistingHasPassword = false;
-const stickyNoteUnlockedIds = new Set();
+let stickyNotesMasterHash = null; // null = no master password set (board unlocked for everyone)
 
 function formatStickyNoteDate(isoString) {
 try {
@@ -2638,50 +2886,25 @@ const tilt = (index % 2 === 0 ? -1 : 1) * (2 + (index % 3) * 1.4);
 el.style.setProperty('--tilt', tilt + 'deg');
 el.style.background = STICKY_NOTE_COLORS[index % STICKY_NOTE_COLORS.length];
 
+const pin = document.createElement('span');
+pin.className = 'sticky-note-pin';
+pin.style.background = STICKY_NOTE_PIN_COLORS[index % STICKY_NOTE_PIN_COLORS.length];
+el.appendChild(pin);
+
 renderStickyNoteInner(el, note);
 return el;
 }
 
 function renderStickyNoteInner(el, note) {
+// Keep the pin, clear everything else
+const pin = el.querySelector('.sticky-note-pin');
 el.innerHTML = "";
+if (pin) el.appendChild(pin);
 
 const dateEl = document.createElement('div');
 dateEl.className = 'sticky-note-date';
 dateEl.textContent = formatStickyNoteDate(note.created_at);
 el.appendChild(dateEl);
-
-const locked = note.has_password && !stickyNoteUnlockedIds.has(note.id);
-
-if (locked) {
-const lockWrap = document.createElement('div');
-lockWrap.className = 'sticky-note-locked';
-lockWrap.innerHTML =
-'<span style="font-size:1.6rem;">🔒</span>' +
-'<p>This memory is password protected</p>' +
-'<input type="password" placeholder="Enter password" class="sticky-note-unlock-input">' +
-'<button type="button" class="sticky-note-unlock-btn">Unlock</button>' +
-'<span class="lock-error">Incorrect password</span>';
-el.appendChild(lockWrap);
-
-const input = lockWrap.querySelector('.sticky-note-unlock-input');
-const btn = lockWrap.querySelector('.sticky-note-unlock-btn');
-const err = lockWrap.querySelector('.lock-error');
-
-const tryUnlock = async () => {
-const hash = await sha256Hex(input.value);
-if (hash === note.password_hash) {
-stickyNoteUnlockedIds.add(note.id);
-if (typeof playUnlockSound === 'function') playUnlockSound();
-renderStickyNoteInner(el, note);
-} else {
-err.style.display = 'inline';
-input.value = '';
-}
-};
-btn.addEventListener('click', tryUnlock);
-input.addEventListener('keypress', (e) => { if (e.key === 'Enter') tryUnlock(); });
-return;
-}
 
 const contentEl = document.createElement('div');
 contentEl.className = 'sticky-note-content';
@@ -2711,15 +2934,12 @@ const contentInput = document.getElementById('stickyNoteContent');
 const photoInput = document.getElementById('stickyNotePhotoInput');
 const previewWrap = document.getElementById('stickyNotePhotoPreviewWrap');
 const preview = document.getElementById('stickyNotePhotoPreview');
-const passToggle = document.getElementById('stickyNotePasswordToggle');
-const passInput = document.getElementById('stickyNotePasswordInput');
 const status = document.getElementById('stickyNoteStatus');
 
 stickyNoteEditingId = existingNote ? existingNote.id : null;
 stickyNotePhotoBlob = null;
 stickyNotePhotoRemoved = false;
 stickyNoteExistingImageUrl = existingNote ? existingNote.image_url : null;
-stickyNoteExistingHasPassword = existingNote ? !!existingNote.has_password : false;
 
 title.textContent = existingNote ? "Edit Memory" : "New Memory";
 contentInput.value = existingNote ? (existingNote.content || "") : "";
@@ -2732,11 +2952,6 @@ previewWrap.style.display = "block";
 } else {
 previewWrap.style.display = "none";
 }
-
-passToggle.checked = stickyNoteExistingHasPassword;
-passInput.style.display = passToggle.checked ? "block" : "none";
-passInput.value = "";
-passInput.placeholder = stickyNoteExistingHasPassword ? "Leave blank to keep current password" : "Set a password for this note";
 
 modal.classList.add('active');
 }
@@ -2751,8 +2966,6 @@ stickyNotePhotoRemoved = false;
 
 async function saveStickyNote() {
 const contentInput = document.getElementById('stickyNoteContent');
-const passToggle = document.getElementById('stickyNotePasswordToggle');
-const passInput = document.getElementById('stickyNotePasswordInput');
 const status = document.getElementById('stickyNoteStatus');
 const saveBtn = document.getElementById('saveStickyNoteBtn');
 
@@ -2772,30 +2985,11 @@ if (stickyNotePhotoBlob) {
 imageUrl = await uploadStickyNotePhoto(stickyNotePhotoBlob);
 }
 
-let hasPassword = passToggle.checked;
-let passwordHash = null;
-if (hasPassword) {
-if (passInput.value) {
-passwordHash = await sha256Hex(passInput.value);
-} else if (stickyNoteEditingId && stickyNoteExistingHasPassword) {
-passwordHash = "__KEEP__";
-} else {
-status.textContent = "Please set a password, or turn off protection.";
-saveBtn.disabled = false;
-return;
-}
-}
-
 const payload = {
 content: content,
-image_url: imageUrl,
-has_password: hasPassword
+image_url: imageUrl
 };
-if (passwordHash !== "__KEEP__") {
-payload.password_hash = hasPassword ? passwordHash : null;
-}
 
-let savedNote;
 if (stickyNoteEditingId) {
 payload.updated_at = new Date().toISOString();
 const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE + "?id=eq." + stickyNoteEditingId, {
@@ -2809,8 +3003,6 @@ headers: {
 body: JSON.stringify(payload)
 });
 if (!res.ok) throw new Error("Update failed");
-const rows = await res.json();
-savedNote = rows[0];
 trackActivity("✏️ Sticky Note Edited", content ? ("Updated memory: \"" + content.slice(0, 120) + "\"") : "A memory was updated.", 0x60a5fa);
 } else {
 const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_TABLE, {
@@ -2824,13 +3016,7 @@ headers: {
 body: JSON.stringify(payload)
 });
 if (!res.ok) throw new Error("Save failed");
-const rows = await res.json();
-savedNote = rows[0];
 trackActivity("📌 New Sticky Note Added", content ? ("New memory: \"" + content.slice(0, 120) + "\"") : "A new photo memory was added.", 0xfbbf24);
-}
-
-if (savedNote.has_password) {
-stickyNoteUnlockedIds.add(savedNote.id);
 }
 
 saveBtn.disabled = false;
@@ -2843,8 +3029,168 @@ saveBtn.disabled = false;
 }
 }
 
-function initStickyNotes() {
+/* ----------------------------------------------------------
+   MASTER PASSWORD — locks/unlocks the ENTIRE sticky notes board
+   (single row in sticky_notes_lock, id = 1)
+---------------------------------------------------------- */
+async function fetchStickyNotesLockStatus() {
+try {
+const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_LOCK_TABLE + "?id=eq.1&select=password_hash", {
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY
+}
+});
+if (!res.ok) throw new Error("Failed to check lock status");
+const rows = await res.json();
+stickyNotesMasterHash = (rows[0] && rows[0].password_hash) ? rows[0].password_hash : null;
+} catch (e) {
+stickyNotesMasterHash = null;
+}
+}
+
+function isStickyNotesSessionUnlocked() {
+return sessionStorage.getItem('stickyNotesUnlocked') === 'true';
+}
+
+async function renderStickyNotesAccessState() {
+const lockGate = document.getElementById('stickyNotesLockGate');
+const unlockedView = document.getElementById('stickyNotesUnlockedView');
+await fetchStickyNotesLockStatus();
+
+const locked = !!stickyNotesMasterHash && !isStickyNotesSessionUnlocked();
+if (locked) {
+lockGate.classList.add('active');
+unlockedView.style.display = 'none';
+} else {
+lockGate.classList.remove('active');
+unlockedView.style.display = 'block';
 fetchStickyNotes();
+}
+}
+
+async function tryUnlockStickyNotesBoard() {
+const input = document.getElementById('stickyNotesUnlockInput');
+const err = document.getElementById('stickyNotesUnlockError');
+const hash = await sha256Hex(input.value);
+if (hash === stickyNotesMasterHash) {
+sessionStorage.setItem('stickyNotesUnlocked', 'true');
+err.style.display = 'none';
+input.value = '';
+trackActivity("🔓 Sticky Notes Unlocked", "The master password was entered correctly.", 0x22c55e);
+if (typeof playUnlockSound === 'function') playUnlockSound();
+renderStickyNotesAccessState();
+} else {
+err.style.display = 'inline';
+input.value = '';
+trackActivity("❌ Sticky Notes Wrong Password", "Someone entered an incorrect master password.", 0xef4444);
+}
+}
+
+function openStickyNotesPasswordManager() {
+const manager = document.getElementById('stickyNotesPasswordManager');
+const label = document.getElementById('stickyNotesPasswordManagerLabel');
+const removeBtn = document.getElementById('stickyNotesRemovePasswordBtn');
+const status = document.getElementById('stickyNotesPasswordManagerStatus');
+document.getElementById('stickyNotesNewPasswordInput').value = '';
+document.getElementById('stickyNotesNewPasswordConfirm').value = '';
+status.textContent = '';
+label.textContent = stickyNotesMasterHash
+? "Change or remove the password that locks all notes."
+: "Set a single password to lock all your notes.";
+removeBtn.style.display = stickyNotesMasterHash ? "inline-block" : "none";
+manager.classList.add('active');
+}
+
+function closeStickyNotesPasswordManager() {
+document.getElementById('stickyNotesPasswordManager').classList.remove('active');
+}
+
+async function upsertStickyNotesLockRow(passwordHash) {
+const res = await fetch(SUPABASE_URL + "/rest/v1/" + STICKY_NOTES_LOCK_TABLE + "?on_conflict=id", {
+method: "POST",
+headers: {
+"apikey": SUPABASE_ANON_KEY,
+"Authorization": "Bearer " + SUPABASE_ANON_KEY,
+"Content-Type": "application/json",
+"Prefer": "resolution=merge-duplicates,return=minimal"
+},
+body: JSON.stringify({ id: 1, password_hash: passwordHash, updated_at: new Date().toISOString() })
+});
+if (!res.ok) throw new Error("Failed to save lock settings");
+}
+
+async function saveStickyNotesMasterPassword() {
+const newPass = document.getElementById('stickyNotesNewPasswordInput').value;
+const confirmPass = document.getElementById('stickyNotesNewPasswordConfirm').value;
+const status = document.getElementById('stickyNotesPasswordManagerStatus');
+
+if (!newPass) { status.textContent = "Please enter a password."; return; }
+if (newPass !== confirmPass) { status.textContent = "Passwords don't match."; return; }
+
+status.textContent = "Saving...";
+try {
+const hash = await sha256Hex(newPass);
+await upsertStickyNotesLockRow(hash);
+stickyNotesMasterHash = hash;
+sessionStorage.setItem('stickyNotesUnlocked', 'true'); // whoever just set it stays unlocked
+trackActivity("🔑 Sticky Notes Master Password Set", "The master password locking all notes was created or changed.", 0xfbbf24);
+closeStickyNotesPasswordManager();
+renderStickyNotesAccessState();
+} catch (e) {
+status.textContent = "Something went wrong. Please try again.";
+}
+}
+
+async function removeStickyNotesMasterPassword() {
+const status = document.getElementById('stickyNotesPasswordManagerStatus');
+status.textContent = "Removing...";
+try {
+await upsertStickyNotesLockRow(null);
+stickyNotesMasterHash = null;
+trackActivity("🔓 Sticky Notes Master Password Removed", "The master password lock on all notes was removed.", 0x94a3b8);
+closeStickyNotesPasswordManager();
+renderStickyNotesAccessState();
+} catch (e) {
+status.textContent = "Something went wrong. Please try again.";
+}
+}
+
+function openStickyNotesBoard() {
+const overlay = document.getElementById('stickyNotesOverlay');
+overlay.classList.add('active');
+trackActivity("🗒️ Sticky Notes Board Opened", "Someone opened the sticky notes board.", 0xa78bfa);
+renderStickyNotesAccessState();
+}
+
+function closeStickyNotesBoard() {
+document.getElementById('stickyNotesOverlay').classList.remove('active');
+closeStickyNotesPasswordManager();
+}
+
+function initStickyNotes() {
+const fab = document.getElementById('stickyNotesFab');
+if (fab) fab.addEventListener('click', openStickyNotesBoard);
+
+const closeBtn = document.getElementById('stickyNotesCloseBtn');
+if (closeBtn) closeBtn.addEventListener('click', closeStickyNotesBoard);
+
+const lockManageBtn = document.getElementById('stickyNotesLockManageBtn');
+if (lockManageBtn) lockManageBtn.addEventListener('click', openStickyNotesPasswordManager);
+
+const cancelPassBtn = document.getElementById('stickyNotesCancelPasswordBtn');
+if (cancelPassBtn) cancelPassBtn.addEventListener('click', closeStickyNotesPasswordManager);
+
+const savePassBtn = document.getElementById('stickyNotesSavePasswordBtn');
+if (savePassBtn) savePassBtn.addEventListener('click', saveStickyNotesMasterPassword);
+
+const removePassBtn = document.getElementById('stickyNotesRemovePasswordBtn');
+if (removePassBtn) removePassBtn.addEventListener('click', removeStickyNotesMasterPassword);
+
+const unlockBtn = document.getElementById('stickyNotesUnlockBtn');
+if (unlockBtn) unlockBtn.addEventListener('click', tryUnlockStickyNotesBoard);
+const unlockInput = document.getElementById('stickyNotesUnlockInput');
+if (unlockInput) unlockInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') tryUnlockStickyNotesBoard(); });
 
 const addBtn = document.getElementById('addStickyNoteBtn');
 if (addBtn) addBtn.addEventListener('click', () => openStickyNoteEditor(null));
@@ -2854,14 +3200,6 @@ if (cancelBtn) cancelBtn.addEventListener('click', closeStickyNoteEditor);
 
 const saveBtn = document.getElementById('saveStickyNoteBtn');
 if (saveBtn) saveBtn.addEventListener('click', saveStickyNote);
-
-const passToggle = document.getElementById('stickyNotePasswordToggle');
-const passInput = document.getElementById('stickyNotePasswordInput');
-if (passToggle && passInput) {
-passToggle.addEventListener('change', () => {
-passInput.style.display = passToggle.checked ? "block" : "none";
-});
-}
 
 const photoInput = document.getElementById('stickyNotePhotoInput');
 const previewWrap = document.getElementById('stickyNotePhotoPreviewWrap');
