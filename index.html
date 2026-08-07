@@ -3634,6 +3634,9 @@ renderStickyNotesAccessState();
 function closeStickyNotesBoard() {
 document.getElementById('stickyNotesOverlay').classList.remove('active');
 closeStickyNotesPasswordManager();
+// Re-arm the lock on close so reopening always asks for the password again,
+// instead of staying "unlocked" for the rest of the browser session.
+sessionStorage.removeItem('stickyNotesUnlocked');
 }
 
 function initStickyNotes() {
